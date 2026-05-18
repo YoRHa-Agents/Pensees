@@ -1,0 +1,66 @@
+<!-- pensees-anchor: session={SLUG}; turn={N}; user_quote="{<=80 chars}" -->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="pensees-candidate" content="mockup">
+<title>Pensees — UI Mockup (DRAFT)</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 24px;
+    background: #faf8f1; color: #2a2a2a;
+    font-family: 'Caveat', 'Comic Neue', 'Excalifont', cursive, '楷体', sans-serif;
+    line-height: 1.45;
+  }
+  .banner {
+    background: #000; color: #fff; font-family: monospace;
+    padding: 4px 12px; font-size: 13px; letter-spacing: 0.5px;
+    display: inline-block;
+  }
+  h1 { margin: 4px 0 2px; font-size: 28px; transform: rotate(-0.3deg); }
+  .axis-note { color: #8a8a82; font-style: italic; margin: 4px 0 14px; }
+  .mockup-frame {
+    border: 1.5px dashed #555;
+    padding: 20px;
+    background: #fffbf2;
+    max-width: 520px;
+  }
+  .region {
+    border: 1.5px dashed #888;
+    padding: 12px;
+    margin: 10px 0;
+    font-size: 18px;
+  }
+  .region.header { background: #fff3b0; }
+  .region.body   { min-height: 80px; }
+  .region.footer { display: flex; gap: 8px; }
+  .fake-btn {
+    border: 1.5px dashed #555;
+    background: #fff;
+    font-family: inherit; font-size: 16px;
+    padding: 6px 14px; cursor: pointer;
+  }
+  .fake-btn:hover { background: #ffe680; }
+  .console-hint { color:#8a8a82;font-size:14px;font-family:monospace;margin-top:14px; }
+</style>
+</head>
+<body>
+<div class="banner">DRAFT — please critique</div>
+<h1>{TITLE — what artifact / screen / page}</h1>
+<p class="axis-note">Variant axis: {density / aesthetic / decision-structure / emphasis} = {value for this file}</p>
+
+<!-- TODO: rename the regions below to match the real artifact. Replace the fake buttons with the actual primary action. Keep dashed borders; do NOT add shadow or rounded corners. -->
+
+<div class="mockup-frame">
+  <div class="region header">{header / title region}</div>
+  <div class="region body">{body / content region · short text or sketch}</div>
+  <div class="region footer">
+    <button class="fake-btn" onclick="console.log('mockup primary action clicked')">primary action</button>
+    <button class="fake-btn" onclick="console.log('mockup secondary action clicked')">secondary action</button>
+  </div>
+</div>
+<p class="console-hint">file://{this-file}.html · click a button to log the action; nothing leaves the page</p>
+</body>
+</html>

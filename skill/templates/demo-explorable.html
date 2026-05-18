@@ -1,0 +1,76 @@
+<!-- pensees-anchor: session={SLUG}; turn={N}; user_quote="{<=80 chars}" -->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="pensees-candidate" content="explorable">
+<title>Pensees — Explorable (DRAFT)</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 24px;
+    background: #faf8f1; color: #2a2a2a;
+    font-family: 'Caveat', 'Comic Neue', 'Excalifont', cursive, '楷体', sans-serif;
+    line-height: 1.45;
+  }
+  .banner {
+    background: #000; color: #fff; font-family: monospace;
+    padding: 4px 12px; font-size: 13px; letter-spacing: 0.5px;
+    display: inline-block;
+  }
+  h1 { margin: 4px 0 2px; font-size: 28px; transform: rotate(-0.3deg); }
+  .axis-note { color: #8a8a82; font-style: italic; margin: 4px 0 14px; }
+  .card {
+    border: 1.5px dashed #555;
+    background: #fffbf2;
+    padding: 16px;
+    max-width: 560px;
+  }
+  .row { margin: 10px 0; }
+  label { display: block; font-size: 18px; margin-bottom: 4px; }
+  input[type=range] { width: 100%; }
+  .readout {
+    font-family: monospace;
+    border: 1.5px dashed #888;
+    background: #fff3b0;
+    padding: 8px 12px;
+    margin-top: 12px;
+    font-size: 16px;
+  }
+</style>
+</head>
+<body>
+<div class="banner">DRAFT — please critique</div>
+<h1>{TITLE — the concept being explored}</h1>
+<p class="axis-note">Variant axis: {density / aesthetic / decision-structure / emphasis} = {value for this file}</p>
+
+<!-- TODO: rename the two sliders to the actual continuous parameters. Replace the readout formula with the real relationship the user wants to see. Keep dashed borders and the hand-drawn look — no Tailwind. -->
+
+<div class="card">
+  <div class="row">
+    <label>parameter 1: <span id="p1-label">{name}</span></label>
+    <input id="p1" type="range" min="0" max="100" value="40">
+  </div>
+  <div class="row">
+    <label>parameter 2: <span id="p2-label">{name}</span></label>
+    <input id="p2" type="range" min="0" max="100" value="60">
+  </div>
+  <div class="readout" id="readout">readout: 0</div>
+</div>
+
+<script>
+  const p1 = document.getElementById('p1');
+  const p2 = document.getElementById('p2');
+  const out = document.getElementById('readout');
+  function update() {
+    const a = Number(p1.value), b = Number(p2.value);
+    // TODO: replace with the real formula relevant to the session
+    out.textContent = 'readout: ' + (a + b) + '  (a=' + a + ', b=' + b + ')';
+  }
+  p1.addEventListener('input', update);
+  p2.addEventListener('input', update);
+  update();
+</script>
+</body>
+</html>
