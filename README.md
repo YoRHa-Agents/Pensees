@@ -119,10 +119,23 @@ write-path whitelist.
 ./tests/run.sh
 ```
 
-The static test set covers HG-05, HG-08..HG-13 from
-`acceptance-criteria.md`. The other hard gates (HG-01..HG-04, HG-06, HG-07)
-require a real session in a host agent and must be smoke-tested manually
-after install.
+The static gate now covers **9 of 13** hard gates from
+`acceptance-criteria.md` (was 7 / 13). `lint-skill` + `lint-templates` +
+`smoke-install` cover HG-05 and HG-08..HG-13. Two new fixture-based lints
+extend the coverage:
+
+- `lint-transcript` parses `skill/examples/example-non-software-session.md`
+  and asserts every agent turn has at most one sentence-ending `?` —
+  a static proxy for HG-07 (the worked example itself must not contradict
+  the rule).
+- `lint-deliverable-templates` asserts the two deliverable templates are
+  substantive (≥ 60 non-blank lines, ≥ 4 H2 headings) and that
+  `acceptance-criteria.template.md` reads standalone (no `见 requirements`
+  / `see requirements.md` cross-refs, AP-12) — readiness proxy for HG-04.
+
+The remaining four gates (HG-01..HG-03 host-agent autoload and HG-06
+no-network demo render) still require a real session in Cursor / Claude
+Code / Codex CLI and must be smoke-tested manually after install.
 
 ## License
 
