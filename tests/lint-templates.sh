@@ -1,8 +1,19 @@
 #!/usr/bin/env bash
 # tests/lint-templates.sh — static lint for skill/templates/*.html.
 #
-# Covers HG-05 (single-file HTML, no external functional URLs) and the
-# visibly-rough aesthetic spec from F-19 / requirements.md §7.3.
+# Covers:
+#   - HG-05 (single-file HTML, no external functional URLs — double-quoted forms);
+#   - HG-06 STATIC SUBSET (no-network demo render — the static-verifiable half).
+#     HG-06 itself ("demos render fully under physical no-network") still
+#     requires a runtime smoke after install: a static lint can confirm the
+#     ABSENCE of all known network-egress patterns enumerated by F-15
+#     (no fetch / no WebSocket / no XHR / no external <iframe> / no CSS
+#     url(http...) etc.) but cannot prove the template actually renders
+#     under a real disconnected network. The static subset is a
+#     necessary-but-not-sufficient signal — it catches a regression where
+#     someone reintroduces a forbidden pattern even when manual smoke is
+#     skipped. See tests/run.sh for the runtime-vs-static split summary.
+#   - the visibly-rough aesthetic spec from F-19 / requirements.md §7.3.
 
 set -uo pipefail
 
@@ -75,6 +86,55 @@ for tpl in "$TEMPLATES_DIR"/*.html; do
     fail "HG-05 functional external URL found (src/href/@import)"
   else
     pass "HG-05 no functional external URL"
+  fi
+
+  # ── HG-06 STATIC SUBSET: enumerate F-15 forbidden network-egress patterns ──
+  # F-15: "No `http://` / `https://` external resources. No CDN fonts.
+  #        No `fetch()`. Offline-double-clickable."
+  # Each sub-check below covers one egress vector NOT caught by the HG-05
+  # check above. False-positive containment: every pattern is shaped to match
+  # FUNCTIONAL syntax (token-bounded keyword + opening paren/quote/angle), so
+  # mentions inside <!-- ... --> comments or pure-string literals like
+  # `"see <iframe> docs"` will not match. The grep patterns are intentionally
+  # conservative — a regression that smuggles in a new vector via an unusual
+  # quoting style is caught by the runtime no-network smoke (HG-06 full).
+
+  # HG-06(a) — JS network APIs (fetch / XHR / WebSocket / EventSource / sendBeacon)
+  if grep -qE '\bfetch\(|XMLHttpRequest|new[[:space:]]+WebSocket\(|new[[:space:]]+EventSource\(|navigator\.sendBeacon' "$tpl"; then
+    fail "HG-06(a) JS network API call found (fetch / XHR / WebSocket / EventSource / sendBeacon)"
+  else
+    pass "HG-06(a) no JS network API call"
+  fi
+
+  # HG-06(b) — single-quoted external URLs in src/href/@import
+  # (companion to HG-05 which only covers the double-quoted form)
+  if grep -qE "src='https?:|href='https?:|@import url\('https?:" "$tpl"; then
+    fail "HG-06(b) single-quoted external URL found (src='/href='/@import')"
+  else
+    pass "HG-06(b) no single-quoted external URL"
+  fi
+
+  # HG-06(c) — CSS url() with external scheme outside @import
+  # (background-image, list-style-image, @font-face src, content, etc.)
+  # @import url(http...) is HG-05's responsibility; explicitly excluded here.
+  if grep -nE 'url\([^)]*https?:' "$tpl" | grep -vE '@import|<!--' >/dev/null 2>&1; then
+    fail "HG-06(c) CSS url(http...) found outside @import (background / font-face / etc.)"
+  else
+    pass "HG-06(c) no CSS url(http) outside @import"
+  fi
+
+  # HG-06(d) — ES module import from external URL
+  if grep -qE "import[[:space:]]+.+[[:space:]]+from[[:space:]]+[\"']https?:|import[(][[:space:]]*[\"']https?:" "$tpl"; then
+    fail "HG-06(d) ES module import from external URL found"
+  else
+    pass "HG-06(d) no ES module import from external URL"
+  fi
+
+  # HG-06(e) — external <iframe>/<embed>/<object> tags
+  if grep -qE "<iframe[^>]*src=[\"']https?:|<embed[^>]*src=[\"']https?:|<object[^>]*data=[\"']https?:" "$tpl"; then
+    fail "HG-06(e) external <iframe>/<embed>/<object> found"
+  else
+    pass "HG-06(e) no external <iframe>/<embed>/<object>"
   fi
 done
 

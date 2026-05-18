@@ -59,7 +59,14 @@ Static (covered by this gate when PASS):
          requires a real host-agent session: at session close, the agent
          must actually write requirements.md + acceptance-criteria.md
          under .local/pensees/{date}-{slug}/outputs/).
-  HG-05  single-file HTML (templates have no functional external URL)
+  HG-05  single-file HTML (templates have no functional external URL —
+         double-quoted src/href/@import forms)
+  HG-06* PARTIAL — F-15 network-egress patterns checked statically
+         (fetch / XHR / WebSocket / EventSource / sendBeacon,
+          single-quoted src/href/@import, CSS url(http...) outside @import,
+          ES module import from URL, external <iframe>/<embed>/<object>).
+         Runtime smoke still required for full credit — see "Manual smoke"
+         block below.
   HG-07  Worked-example transcript ≤ 1 sentence-end '?' per agent turn
          (fixture-based proxy — runtime verification of every live turn
          still requires a real host-agent session).
@@ -75,6 +82,10 @@ Manual smoke required (cannot be verified statically — run after install):
   HG-02  Claude Code autoloads the skill on trigger phrase
   HG-03  Codex CLI autoloads the skill on trigger phrase
   HG-06  Demos render fully under physical no-network
+         (the static subset is covered above as HG-06*; the runtime smoke
+          remains the source of truth — disconnect the network, double-click
+          each demo .html, confirm every element renders + every interactive
+          button still responds.)
 
 To run a manual smoke:
   ./install.sh                            # symlinks ./skill into all 3 targets

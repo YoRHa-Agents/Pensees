@@ -119,10 +119,10 @@ write-path whitelist.
 ./tests/run.sh
 ```
 
-The static gate now covers **9 of 13** hard gates from
-`acceptance-criteria.md` (was 7 / 13). `lint-skill` + `lint-templates` +
-`smoke-install` cover HG-05 and HG-08..HG-13. Two new fixture-based lints
-extend the coverage:
+The static gate now covers **9 hard gates fully + 1 partial = effectively
+9.5 / 13** from `acceptance-criteria.md` (was 7 / 13, then 9 / 13).
+`lint-skill` + `lint-templates` + `smoke-install` cover HG-05, HG-06 (static
+subset), and HG-08..HG-13. Two fixture-based lints extend the coverage:
 
 - `lint-transcript` parses `skill/examples/example-non-software-session.md`
   and asserts every agent turn has at most one sentence-ending `?` —
@@ -133,9 +133,19 @@ extend the coverage:
   `acceptance-criteria.template.md` reads standalone (no `见 requirements`
   / `see requirements.md` cross-refs, AP-12) — readiness proxy for HG-04.
 
-The remaining four gates (HG-01..HG-03 host-agent autoload and HG-06
-no-network demo render) still require a real session in Cursor / Claude
-Code / Codex CLI and must be smoke-tested manually after install.
+`lint-templates` was extended with the HG-06 static subset: it now enumerates
+every F-15-forbidden network-egress pattern (`fetch(`, `XMLHttpRequest`,
+`new WebSocket(`, `new EventSource(`, `navigator.sendBeacon`, single-quoted
+`src='http`/`href='http`/`@import url('http`, CSS `url(http...)` outside
+`@import`, ES module `import ... from 'http`, and external
+`<iframe>`/`<embed>`/`<object>`). Catching any of these statically is a
+necessary-but-not-sufficient signal — the **full** HG-06 (every demo
+renders + interacts under physical no-network) still requires a manual
+smoke after install.
+
+The remaining three gates (HG-01..HG-03 host-agent autoload) plus the full
+runtime no-network smoke for HG-06 still require a real session in Cursor /
+Claude Code / Codex CLI and must be smoke-tested manually after install.
 
 ## License
 
