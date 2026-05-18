@@ -1,0 +1,83 @@
+<!-- pensees-anchor: session={SLUG}; turn={N}; user_quote="{<=80 chars}" -->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="pensees-candidate" content="forced-choice">
+<title>Pensees — Forced Choice (DRAFT)</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 24px;
+    background: #faf8f1; color: #2a2a2a;
+    font-family: 'Caveat', 'Comic Neue', 'Excalifont', cursive, '楷体', sans-serif;
+    line-height: 1.45;
+  }
+  .banner {
+    background: #000; color: #fff; font-family: monospace;
+    padding: 4px 12px; font-size: 13px; letter-spacing: 0.5px;
+    display: inline-block;
+  }
+  h1 { margin: 4px 0 2px; font-size: 28px; transform: rotate(-0.4deg); }
+  .axis-note { color: #8a8a82; font-style: italic; margin: 4px 0 14px; }
+  .card {
+    border: 1.5px dashed #555;
+    background: #fffbf2;
+    padding: 18px;
+    max-width: 520px;
+  }
+  .scenario { font-size: 20px; margin: 6px 0 14px; }
+  .choices { display: flex; flex-direction: column; gap: 10px; }
+  .choice-btn {
+    border: 1.5px dashed #555;
+    background: #fff;
+    font-family: inherit; font-size: 18px;
+    text-align: left;
+    padding: 10px 14px; cursor: pointer;
+  }
+  .choice-btn:hover { background: #ffe680; }
+  .saved {
+    font-family: monospace;
+    border: 1.5px dashed #888;
+    background: #fff3b0;
+    padding: 8px 12px;
+    margin-top: 14px;
+    font-size: 14px;
+    min-height: 22px;
+  }
+</style>
+</head>
+<body>
+<div class="banner">DRAFT — please critique</div>
+<h1>{TITLE — what is being chosen}</h1>
+<p class="axis-note">Variant axis: {density / aesthetic / decision-structure / emphasis} = {value for this file}</p>
+
+<!-- TODO: replace the scenario sentence with the real ≤ 60-char framing from the session. Replace the 3 choices with the real mutually-exclusive options. Keep dashed borders. -->
+
+<div class="card">
+  <p class="scenario">{scenario sentence, ≤ 60 chars}</p>
+  <div class="choices">
+    <button class="choice-btn" data-choice="A" onclick="pick(this)">{choice A — short verb phrase}</button>
+    <button class="choice-btn" data-choice="B" onclick="pick(this)">{choice B — short verb phrase}</button>
+    <button class="choice-btn" data-choice="C" onclick="pick(this)">{choice C — short verb phrase}</button>
+  </div>
+  <div class="saved" id="saved">no choice yet</div>
+</div>
+
+<script>
+  function pick(btn) {
+    const choice = btn.getAttribute('data-choice');
+    try {
+      localStorage.setItem('pensees-forced-choice', choice);
+    } catch (e) {
+      // No silent failure: surface storage errors to the console so the
+      // user / reviewer can see why the choice did not persist.
+      console.warn('localStorage write failed:', e);
+    }
+    document.getElementById('saved').textContent =
+      'choice saved locally: ' + choice + ' (key: pensees-forced-choice)';
+  }
+</script>
+</body>
+</html>

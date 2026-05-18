@@ -1,0 +1,17 @@
+# Pensees reasoning-method menu. Source: BMAD-METHOD (MIT License, see https reference in comment) plus classic methods.
+# Attribution: portions derived from BMAD-METHOD (bmadcode/BMAD-METHOD, MIT). Other entries are public-domain classics.
+# Format: id,name,preset,one_line_use,when_wins,when_loses,source
+# Load by Challenge preset to offer a multi-choice menu. Do not load all at once; pick 3-5 by topic fit.
+id,name,preset,one_line_use,when_wins,when_loses,source
+M-01,Devil's Advocate,challenge,Argue the strongest case against the current plan,A near-final plan that nobody has stressed,User is exploring; no plan yet exists,BMAD-METHOD
+M-02,Pre-Mortem,challenge,Imagine the project failed at day 30; list every cause,Decision feels safe but is irreversible,No concrete plan to fail yet,Klein 2007 / BMAD-METHOD
+M-03,Red Team,challenge,Adopt an adversary persona and attack the design,System has external attackers or political stakeholders,Pure personal decision with no adversary,BMAD-METHOD
+M-04,Five Whys,exploratory,Ask why iteratively to reach the root cause,Surface complaint masks a deeper need,User wants action not introspection,Toyota / Ohno
+M-05,Six Thinking Hats,exploratory,Cycle six perspectives: facts, emotions, caution, benefits, creativity, process,Group decision with mixed stakeholders,Solo quick decision,De Bono
+M-06,SCAMPER,exploratory,Substitute / Combine / Adapt / Modify / Put-to-other-use / Eliminate / Reverse the idea,Generating variants of a concrete artifact,Highly constrained engineering problem,Eberle / Osborn
+M-07,Inversion,exploratory,Ask what would make this guaranteed to fail; then avoid those,Decision under uncertainty with many failure modes,Pure execution task with one obvious method,Charlie Munger / Jacobi
+M-08,Premortem-Driven Scoping,convergence,Use pre-mortem outputs to remove items from scope,Scope too large for available time,Scope already minimal,BMAD-METHOD
+M-09,Constraint Mapping,convergence,List hard / soft / wished constraints; force trade-offs,Multiple competing constraints,Single dominant constraint,BMAD-METHOD
+M-10,Stakeholder Persona Walk,exploratory,For each named stakeholder walk through one usage scenario,Multi-user product or policy,Single-user tool,Cognitive walkthrough (HCI)
+M-11,Decision Matrix,convergence,Score N options across M weighted criteria,Comparing comparable options on multiple axes,Options are fundamentally incomparable,Classic / Spec Kit echo
+M-12,Reversibility Check,challenge,Classify the decision as reversible / hard-to-reverse and act accordingly,Time pressure with mixed reversibility,Already irreversible by deadline,Bezos one-way two-way doors

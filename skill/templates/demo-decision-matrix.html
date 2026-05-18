@@ -1,0 +1,76 @@
+<!-- pensees-anchor: session={SLUG}; turn={N}; user_quote="{<=80 chars}" -->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="pensees-candidate" content="decision-matrix">
+<title>Pensees — Decision Matrix (DRAFT)</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 24px;
+    background: #faf8f1; color: #2a2a2a;
+    font-family: 'Caveat', 'Comic Neue', 'Excalifont', cursive, '楷体', sans-serif;
+    line-height: 1.45;
+  }
+  .banner {
+    background: #000; color: #fff; font-family: monospace;
+    padding: 4px 12px; font-size: 13px; letter-spacing: 0.5px;
+    display: inline-block;
+  }
+  table.matrix {
+    border-collapse: collapse;
+    margin: 18px 0; width: 100%; max-width: 800px;
+  }
+  table.matrix th, table.matrix td {
+    border: 1.5px dashed #555;
+    padding: 8px 12px;
+    text-align: left;
+    font-size: 18px;
+  }
+  table.matrix th { background: #fffbf2; }
+  .lean-btn {
+    margin-top: 6px;
+    border: 1.5px dashed #555;
+    background: #fff3b0;
+    font-family: inherit; font-size: 16px;
+    padding: 4px 10px; cursor: pointer;
+  }
+  .lean-btn:hover { background: #ffe680; }
+  h1 { margin: 4px 0 2px; font-size: 28px; transform: rotate(-0.4deg); }
+  .axis-note { color: #8a8a82; font-style: italic; margin: 4px 0 14px; }
+</style>
+</head>
+<body>
+<div class="banner">DRAFT — please critique</div>
+<h1>{TITLE — fill in topic}</h1>
+<p class="axis-note">Variant axis: {density / aesthetic / decision-structure / emphasis} = {value for this file}</p>
+
+<!-- TODO: replace the example rows below with the real options and criteria from the current session. Keep cell text short (5-10 chars). Do not polish: dashed borders, no rounded corners, no shadow. -->
+
+<table class="matrix">
+  <thead>
+    <tr>
+      <th>criterion ↓ / option →</th>
+      <th>option A</th>
+      <th>option B</th>
+      <th>option C</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>criterion 1</td><td>~</td><td>~</td><td>~</td></tr>
+    <tr><td>criterion 2</td><td>~</td><td>~</td><td>~</td></tr>
+    <tr><td>criterion 3</td><td>~</td><td>~</td><td>~</td></tr>
+    <tr>
+      <td><em>I lean →</em></td>
+      <td><button class="lean-btn" onclick="console.log('lean: A')">A</button></td>
+      <td><button class="lean-btn" onclick="console.log('lean: B')">B</button></td>
+      <td><button class="lean-btn" onclick="console.log('lean: C')">C</button></td>
+    </tr>
+  </tbody>
+</table>
+
+<p style="color:#8a8a82;font-size:14px;font-family:monospace;">file://{this-file}.html · click a "lean" button and the choice prints to the browser console</p>
+</body>
+</html>

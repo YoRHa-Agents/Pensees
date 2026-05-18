@@ -1,0 +1,103 @@
+---
+alwaysApply: true
+description: Project soul / always-applied principles for Pensees
+---
+
+# Pensees — Project Soul
+
+Authoritative, always-applied guidance for every agent and contributor working in
+this repository. Compiled by DevolaFlow into `AGENTS.md` and the
+`.cursor/rules/` bundle; do not hand-edit those outputs.
+
+## 1. Project North Star
+
+Pensees is at the **greenfield stage**. The repository currently contains only
+governance scaffolding and this soul layer — no product code, no architecture
+commitments, no chosen language or framework. Treat every contribution as a
+deliberate first brick: prefer reversible, well-explained moves over speculative
+breadth. This soul will be refined as the product takes shape; when product
+identity, domain model, or stack choices crystallize, propose updates to this
+file (and the compiler will propagate them) rather than smuggling implicit
+assumptions into code.
+
+## 2. Engineering Principles
+
+These principles distill the workspace-level governance rules that already apply
+to this repo. They are durable and apply across whatever stack Pensees adopts.
+
+- **Protected branches are sacred.** Never push directly to `main`, `master`,
+  `yc_dev`, or `production`. Always branch off, then open a Merge Request / Pull
+  Request for review.
+- **No silent failures.** Never swallow an error with a bare `try`/`except` (or
+  language equivalent). Either log it, re-throw it, or return an explicit error
+  state. The only exception is when the operator has explicitly asked for
+  "best-effort" execution on a non-critical task, and that exception must be
+  called out in the diff.
+- **Braces always (C++).** In C++ code, every `if` / `else if` / `else` body
+  must be wrapped in braces. No single-line unbracketed bodies, even for
+  one-liners. Apply the same "no implicit blocks" instinct to any language with
+  ambiguous control-flow syntax.
+- **Documentation Protocol.** If a `doc_auto/` directory exists, read it before
+  changing related code, and update it (with a timestamp on the change) when
+  your work invalidates it.
+- **Lark CLI footer.** When using `lark-cli` for any write/send operation other
+  than mail, append the standard provenance footer
+  (`本X由飞书工具 Lark-Cli X`) so downstream readers know the artifact was
+  produced by an agent tool.
+- **Mandatory verification.** New logic gets tests (unit and/or integration) in
+  the same change. Never mark a verification step as "todo" to unblock a merge,
+  and never disable an existing test without an in-MR justification.
+
+## 3. Quality Bar
+
+- **Tests are part of the change, not a follow-up.** A change without a test
+  story is incomplete. If the surface is genuinely untestable, document why in
+  the MR description.
+- **Errors must be observable.** Logged with context, surfaced to callers, or
+  promoted to an explicit error type. Silent fallbacks are a defect.
+- **No direct pushes to protected branches.** Every change lands via MR/PR
+  with at least one reviewer signal (human or designated bot) before merge.
+- **Reproducibility over cleverness.** Prefer code, config, and tooling that
+  produce the same result on a teammate's machine and in CI as on yours.
+- **Boring is good at greenfield.** Until Pensees has a real product shape,
+  favor the most boring, most reversible option. Avoid load-bearing
+  abstractions before the second concrete use case.
+
+## 4. Collaboration Conventions
+
+- **Branch naming.** Use a short, prefixed slug:
+  `feat/<scope>-<summary>`, `fix/<scope>-<summary>`, `chore/<scope>-<summary>`,
+  `docs/<scope>-<summary>`, `refactor/<scope>-<summary>`. Keep slugs lowercase,
+  hyphen-separated, and under ~50 chars.
+- **Commit messages.** Use Conventional Commits
+  (`type(scope): summary`, e.g. `feat(rules): add soul layer`). Keep the
+  subject under 72 chars; explain the "why" in the body when non-obvious.
+  Reference task IDs (e.g. `W1.T1.author-soul-recompile`) when they exist.
+- **Pull / Merge Requests.** One logical change per MR. Description states the
+  intent, the user-visible effect, and the test evidence. Request review from
+  at least one human or designated reviewer; do not self-approve protected
+  changes.
+- **Generated artifacts.** Files marked as auto-generated
+  (e.g. `AGENTS.md`, `.cursor/rules/repo-governance.mdc`,
+  `.rules/.compile-hashes.json`) must be regenerated through their compiler,
+  never hand-edited. Edit the source `.rules/*.mdc` layers and re-run
+  `devola-init local`.
+
+## 5. When in Doubt
+
+If the next action is destructive, expands scope beyond what the operator asked
+for, touches files outside the task's declared ownership, or trades a workspace
+rule for short-term convenience: **pause and ask the operator first**. A short
+clarifying exchange is always cheaper than an unwind. Concrete triggers:
+
+- About to delete, rename, or rewrite history of anything you did not just
+  create in this session.
+- About to push to, or force-push, a protected branch.
+- About to suppress an error, skip a test, or disable a check to make CI pass.
+- About to introduce a new language, framework, service, or external dependency
+  while Pensees still has no settled stack.
+- About to modify files outside the task's `Owned files` list — even "just to
+  fix a small thing".
+
+When the answer is unclear, default to the smaller, more reversible move and
+surface the question in your status report instead of guessing.
