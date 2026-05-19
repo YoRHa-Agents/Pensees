@@ -21,6 +21,9 @@ chmod +x \
   tests/smoke-install.sh \
   tests/lint-transcript.sh \
   tests/lint-deliverable-templates.sh \
+  tests/lint-frontmatter.sh \
+  tests/lint-references.sh \
+  tests/test-lint-templates.sh \
   2>/dev/null || true
 
 overall_rc=0
@@ -46,6 +49,9 @@ run_step "lint-templates"              tests/lint-templates.sh
 run_step "smoke-install"               tests/smoke-install.sh
 run_step "lint-transcript"             tests/lint-transcript.sh
 run_step "lint-deliverable-templates"  tests/lint-deliverable-templates.sh
+run_step "lint-frontmatter"            tests/lint-frontmatter.sh
+run_step "lint-references"             tests/lint-references.sh
+run_step "test-lint-templates"         tests/test-lint-templates.sh
 
 echo
 echo "===================================================================="
@@ -54,6 +60,14 @@ echo "===================================================================="
 
 cat <<'EOF'
 Static (covered by this gate when PASS):
+  HG-01* PARTIAL — SKILL.md YAML frontmatter is parseable, name == pensees,
+         description ≤ 1024 chars + present in zh and en triggers, no
+         autoload-inducing phrases (lint-frontmatter). This is the
+         necessary precondition for Cursor / Claude Code / Codex autoload.
+         The runtime smoke (open each host agent, send a trigger phrase,
+         confirm the skill loads) remains the source of truth.
+  HG-02* PARTIAL — same as HG-01*; one frontmatter governs all three hosts.
+  HG-03* PARTIAL — same as HG-01*; one frontmatter governs all three hosts.
   HG-04  Deliverable templates are substantive and AP-12-standalone
          (fixture-based proxy — end-to-end runtime verification still
          requires a real host-agent session: at session close, the agent
@@ -61,10 +75,12 @@ Static (covered by this gate when PASS):
          under .local/pensees/{date}-{slug}/outputs/).
   HG-05  single-file HTML (templates have no functional external URL —
          double-quoted src/href/@import forms)
-  HG-06* PARTIAL — F-15 network-egress patterns checked statically
-         (fetch / XHR / WebSocket / EventSource / sendBeacon,
-          single-quoted src/href/@import, CSS url(http...) outside @import,
-          ES module import from URL, external <iframe>/<embed>/<object>).
+  HG-06* PARTIAL — F-15 network-egress patterns checked statically across
+         BOTH templates (lint-templates) AND any html/js/css code blocks
+         inside skill/references/*.md + skill/examples/*.md (lint-references):
+         fetch / XHR / WebSocket / EventSource / sendBeacon,
+         single-quoted src/href/@import, CSS url(http...) outside @import,
+         ES module import from URL, external <iframe>/<embed>/<object>.
          Runtime smoke still required for full credit — see "Manual smoke"
          block below.
   HG-07  Worked-example transcript ≤ 1 sentence-end '?' per agent turn
@@ -77,10 +93,16 @@ Static (covered by this gate when PASS):
   HG-12  local preview port markers present (127.0.0.1 + 8765 range)
   HG-13  option-detail probe sections present ((e) + 后果/对比/场景/未知)
 
+Meta-tests (unit tests for the lint logic itself):
+  test-lint-templates  — verifies the HG-05 + HG-06(a..e) sub-checks in
+                         lint-templates.sh exit 0 on unmodified templates
+                         AND exit non-zero with the right sub-check named
+                         when each of 7 forbidden patterns is injected.
+
 Manual smoke required (cannot be verified statically — run after install):
-  HG-01  Cursor autoloads the skill on trigger phrase
-  HG-02  Claude Code autoloads the skill on trigger phrase
-  HG-03  Codex CLI autoloads the skill on trigger phrase
+  HG-01  Cursor autoloads the skill on trigger phrase (full end-to-end)
+  HG-02  Claude Code autoloads the skill on trigger phrase (full end-to-end)
+  HG-03  Codex CLI autoloads the skill on trigger phrase (full end-to-end)
   HG-06  Demos render fully under physical no-network
          (the static subset is covered above as HG-06*; the runtime smoke
           remains the source of truth — disconnect the network, double-click
