@@ -1,0 +1,61 @@
+name: test
+
+# CI for the Pensees skill bundle.
+#
+# What this workflow does:
+#   - Runs the full tests/run.sh gate on every push and pull-request to main.
+#   - Pure bash: no language toolchain install needed beyond what
+#     ubuntu-latest ships (bash, awk, sed, grep, find, mktemp, python3).
+#
+# What this workflow deliberately does NOT do:
+#   - It does NOT run a host-agent smoke (HG-01..HG-03 manual + HG-06 full
+#     runtime no-network smoke). Those still require a real Cursor /
+#     Claude Code / Codex CLI session on a network-disconnected host and
+#     are documented as such in tests/run.sh + README.md.
+#   - It does NOT publish, deploy, or build any artifact. Pensees is a
+#     skill package; installation is the consumer's `./install.sh` step.
+#
+# Trigger matrix:
+#   - push:         any branch (so local pre-PR runs are visible)
+#   - pull_request: any PR targeting main
+#   - workflow_dispatch: manual operator-triggered run
+on:
+  push:
+    branches: ['**']
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  gate:
+    name: tests/run.sh (HG static gate)
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Show tool versions
+        run: |
+          set -x
+          bash --version | head -1
+          awk --version 2>&1 | head -1 || awk -W version 2>&1 | head -1 || true
+          grep --version | head -1
+          python3 --version
+          python3 -c 'import yaml; print("PyYAML:", yaml.__version__)' || echo "PyYAML not preinstalled (lint-frontmatter will use awk fallback)"
+
+      - name: Run gate
+        run: bash tests/run.sh
+
+      - name: Upload gate log on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gate-log
+          path: |
+            tests/
+          if-no-files-found: warn
+          retention-days: 7

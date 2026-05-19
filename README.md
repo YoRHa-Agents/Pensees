@@ -119,10 +119,15 @@ write-path whitelist.
 ./tests/run.sh
 ```
 
-The static gate now covers **9 of 13** hard gates from
-`acceptance-criteria.md` (was 7 / 13). `lint-skill` + `lint-templates` +
-`smoke-install` cover HG-05 and HG-08..HG-13. Two new fixture-based lints
-extend the coverage:
+The static gate now covers **6 hard gates fully + 4 partial = effectively
+8 / 13** from `acceptance-criteria.md` (was 7 / 13, then 9 / 13, then 9.5 / 13).
+"Effectively 8" is a stricter accounting than "9.5": HG-01, HG-02, HG-03,
+and HG-06 each contribute their static preconditions but their full end-to-end
+verification still needs a real host-agent session. We score each as 0.5.
+`lint-skill` + `lint-templates` + `lint-frontmatter` + `lint-references` +
+`smoke-install` cover HG-05, the HG-06 static subset (across templates AND
+reference code blocks), the HG-01..HG-03 autoload preconditions, and
+HG-08..HG-13. Three fixture-based lints extend the coverage:
 
 - `lint-transcript` parses `skill/examples/example-non-software-session.md`
   and asserts every agent turn has at most one sentence-ending `?` —
@@ -132,10 +137,34 @@ extend the coverage:
   substantive (≥ 60 non-blank lines, ≥ 4 H2 headings) and that
   `acceptance-criteria.template.md` reads standalone (no `见 requirements`
   / `see requirements.md` cross-refs, AP-12) — readiness proxy for HG-04.
+- `lint-frontmatter` parses `skill/SKILL.md`'s YAML frontmatter (with
+  PyYAML when available, falling back to an awk structural parser — no
+  silent fallback) and asserts: name == `pensees`, description present +
+  ≤ 1024 chars, ≥ 2 zh + ≥ 2 en trigger phrases present, no autoload-
+  inducing phrases. Malformed frontmatter is the most common failure mode
+  for HG-01..HG-03 — none of the three host agents will autoload a skill
+  whose frontmatter does not parse.
 
-The remaining four gates (HG-01..HG-03 host-agent autoload and HG-06
-no-network demo render) still require a real session in Cursor / Claude
-Code / Codex CLI and must be smoke-tested manually after install.
+`lint-templates` enumerates every F-15-forbidden network-egress pattern
+inside the demo HTML templates (`fetch(`, `XMLHttpRequest`,
+`new WebSocket(`, `new EventSource(`, `navigator.sendBeacon`, single-quoted
+`src='http`/`href='http`/`@import url('http`, CSS `url(http...)` outside
+`@import`, ES module `import ... from 'http`, and external
+`<iframe>`/`<embed>`/`<object>`). `lint-references` re-runs the same
+patterns inside any `html` / `js` / `javascript` / `ts` / `typescript` /
+`css` code blocks found in `skill/references/*.md` and `skill/examples/*.md`,
+so a regression that smuggles a forbidden pattern into a teaching example
+is caught too. `test-lint-templates` is the meta-test that proves the
+`lint-templates` regex is still functional: it injects each forbidden
+pattern into a temp copy and asserts the lint exits non-zero with the
+right sub-check named in the FAIL line.
+
+The remaining gaps (full end-to-end HG-01..HG-03 host-agent autoload plus
+the full runtime no-network smoke for HG-06) still require a real session
+in Cursor / Claude Code / Codex CLI and must be smoke-tested manually
+after install. CI runs the full `tests/run.sh` gate on every push and PR
+to `main` via `.github/workflows/test.yml` (ubuntu-latest, pure-bash, no
+language toolchain beyond what the runner ships).
 
 ## License
 
