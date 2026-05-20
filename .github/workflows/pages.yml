@@ -1,0 +1,86 @@
+name: pages
+
+# Builds and deploys the Pensees public site to GitHub Pages.
+#
+# What this workflow does:
+#   - Stages the site/** tree plus the root-level get.sh installer into a
+#     single Pages artifact, then publishes it via the official Pages
+#     deploy action.
+#
+# What this workflow deliberately does NOT do:
+#   - It does NOT gate on tests/run.sh — that's test.yml's job; a Pages
+#     deploy should not block on a separate static gate. If the gate is
+#     red, the operator sees it on the same commit's "test" check.
+#   - It does NOT enable the Pages feature itself; the `pages: write`
+#     permission only allows publishing once Pages is already enabled.
+#
+# IMPORTANT (operator one-time setup):
+#   In repo Settings -> Pages, set "Build and deployment > Source =
+#   GitHub Actions". The first deploy will fail until that switch is on.
+#
+# Trigger matrix:
+#   - push:                main, but only when the site or installer
+#                          surface actually changed (paths filter)
+#   - workflow_dispatch:   manual operator-triggered run
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'site/**'
+      - 'get.sh'
+      - '.github/workflows/pages.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Assemble site artifact
+        run: |
+          set -euo pipefail
+          STAGE="$RUNNER_TEMP/pages-stage"
+          mkdir -p "$STAGE"
+          cp -R site/. "$STAGE/"
+          if [ -f get.sh ]; then
+            cp get.sh "$STAGE/get.sh"
+          else
+            echo "[pages] WARN: get.sh not present at repo root; the curl one-liner will 404 until Wave 2B lands."
+          fi
+          ls -la "$STAGE"
+          echo "STAGE_DIR=$STAGE" >> "$GITHUB_ENV"
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ${{ env.STAGE_DIR }}
+
+  deploy:
+    name: deploy
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

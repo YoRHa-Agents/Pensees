@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Pensees  geometric site mark.
+  Two concentric squares offset by ~12% of the viewBox; uses currentColor
+  so it inherits whichever palette token wraps the inline-svg in styles.css.
+  Total node count: <svg> + 2x <rect> = 3 (well under the 6-node budget
+  set in v0.3.0-design.md §2.2).
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" role="img" aria-label="YoRHa-style mark">
+  <rect x="3" y="3" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5"/>
+  <rect x="7" y="7" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5"/>
+</svg>

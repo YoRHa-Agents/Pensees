@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<!--
+  Pensees meta-demo · 01-preset-voice-comparison
+  Generated during the Pensees init session, 2026-05-18
+  Conversation-anchored: this demo is emitted to satisfy convergence-checklist item #6
+    ("至少一个 HTML demo 被用户看过且赋予明确反馈")
+  Scenario: meta - the user is the designer of Pensees
+  Variant count: 3 (Exploratory / Challenge / Convergence)
+  Visibly-rough aesthetic: required by F-19 + glossary "visibly-rough demo"
+  Disposable: YES - this is a thinking artifact, not a deliverable
+
+  --- UPDATE LOG ---
+  v0.2 (2026-05-18, 同日下午): added F-30 (本地预览端口) hint at bottom + F-31 (选项详解通道) "(e)" option appended to all multi-choice bubbles + Exploratory panel includes an inline sketch of an F-31 unfold for option (a). Keeps visibly-rough aesthetic: new edits show as additional strikethroughs/sticky notes rather than clean rewrites.
+-->
+<!-- pensees-anchor: session=2026-05-18-pensees-self-design; turn=0; user_quote="我想做一个工具,帮自己和团队把模糊的想法变成清晰的需求" -->
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="pensees-candidate" content="forced-choice">
+  <title>Pensees — 3 个 preset 试听对比</title>
+  <style>
+    /* TODO: 颜色系统是随手挑的,不是 design token,等真做 UI 时重新考虑 */
+    :root {
+      --bg-page: #faf8f1;
+      --bg-bubble-user: #ffffff;
+      --bg-bubble-agent: #fffbf2;
+      --bg-sticky: #fff3b0;
+      --color-text: #2a2a2a;
+      --color-faint: #8a8a82;
+      --color-strike: #b04030;
+      --color-warn: #c87800;
+      --color-exploratory: #b08820;
+      --color-challenge: #a54030;
+      --color-convergence: #36695a;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      padding: 28px 18px 92px;
+      background: var(--bg-page);
+      color: var(--color-text);
+      font-family: 'Caveat', 'Comic Neue', 'Comic Sans MS', 'Marker Felt',
+                   'Patrick Hand', cursive,
+                   '楷体', 'KaiTi', 'STKaiti', sans-serif;
+      line-height: 1.45;
+      min-height: 100vh;
+    }
+
+    header.page-head {
+      max-width: 1200px;
+      margin: 0 auto 20px;
+    }
+
+    .page-title {
+      font-size: 40px;
+      margin: 0 0 4px;
+      transform: rotate(-0.5deg);
+      letter-spacing: 0.5px;
+    }
+    .page-title del {
+      color: var(--color-strike);
+      opacity: 0.55;
+      font-size: 28px;
+      text-decoration-thickness: 2px;
+    }
+
+    .subtitle {
+      color: var(--color-faint);
+      font-size: 22px;
+      margin: 0 0 14px;
+      font-style: italic;
+    }
+
+    .sticky-note {
+      display: inline-block;
+      background: var(--bg-sticky);
+      padding: 7px 16px 9px;
+      transform: rotate(1.8deg);
+      box-shadow: 2px 3px 7px rgba(0, 0, 0, 0.10);
+      font-size: 19px;
+      margin: 6px 0 26px 4px;
+      border: 1px solid #d8b840;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 22px;
+      max-width: 1200px;
+      margin: 0 auto;
+      align-items: start;
+    }
+    @media (max-width: 800px) {
+      .grid { grid-template-columns: 1fr; gap: 18px; }
+    }
+
+    .panel {
+      border: 2px dashed #888;
+      border-radius: 12px;
+      padding: 14px 14px 14px;
+      background: #ffffff;
+    }
+    /* hand-placed rotations + asymmetric margin on middle panel */
+    .panel.p-1 { transform: rotate(-0.35deg); }
+    .panel.p-2 { transform: rotate(+0.25deg); margin-top: 12px; }
+    .panel.p-3 { transform: rotate(+0.4deg); }
+
+    .panel-header {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+    }
+    .preset-name { font-size: 26px; font-weight: 700; letter-spacing: 0.5px; }
+    .preset-name.exploratory { color: var(--color-exploratory); }
+    .preset-name.challenge   { color: var(--color-challenge); }
+    .preset-name.convergence { color: var(--color-convergence); }
+
+    .badge {
+      display: inline-block;
+      background: #f0ede4;
+      border: 1px dashed #aaa;
+      padding: 1px 7px;
+      font-size: 14px;
+      color: #555;
+      border-radius: 4px;
+    }
+
+    .trigger-hint {
+      display: block;
+      font-size: 14px;
+      color: var(--color-faint);
+      margin: 0 0 8px 2px;
+      font-family: monospace;
+    }
+
+    .bubble {
+      border: 2px dashed #888;
+      border-radius: 12px;
+      padding: 10px 13px 12px;
+      margin: 8px 0;
+      font-size: 17px;
+    }
+    .bubble.user {
+      background: var(--bg-bubble-user);
+      font-family: Georgia, 'Times New Roman', '宋体', 'SimSun', serif;
+      font-size: 15px;
+      line-height: 1.6;
+      border-color: #aaa;
+    }
+    .bubble.user::before {
+      content: "USER ▸";
+      display: block;
+      font-family: monospace;
+      font-size: 11px;
+      color: var(--color-faint);
+      letter-spacing: 1px;
+      margin-bottom: 4px;
+    }
+    .bubble.agent {
+      background: var(--bg-bubble-agent);
+    }
+    .bubble.agent::before {
+      content: "PENSEES ▸";
+      display: block;
+      font-family: monospace;
+      font-size: 11px;
+      color: var(--color-faint);
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+    }
+    .bubble.agent p { margin: 6px 0; }
+    .bubble.agent ul {
+      margin: 6px 0 8px;
+      padding-left: 22px;
+    }
+    .bubble.agent li { margin: 3px 0; }
+    .bubble.agent b { color: #1a1a1a; }
+
+    .flag {
+      background: #fff3b0;
+      padding: 5px 9px 6px;
+      border-left: 3px solid var(--color-warn);
+      font-size: 16px;
+      margin: 7px 0;
+      display: block;
+    }
+    .pre-em       { color: var(--color-challenge); font-weight: 700; }
+    .conv-em      { color: var(--color-convergence); font-weight: 700; }
+    .example-line {
+      font-size: 14px;
+      color: #707070;
+      font-family: Georgia, '宋体', serif;
+      margin-top: 6px;
+      padding: 4px 6px;
+      border-top: 1px dotted #c0c0b8;
+    }
+
+    .panel-footer {
+      margin-top: 10px;
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .reaction-btn {
+      background: #f8f6ea;
+      border: 1.5px dashed #999;
+      padding: 4px 11px 5px;
+      font-family: 'Caveat', 'Comic Sans MS', cursive;
+      font-size: 15px;
+      cursor: pointer;
+      border-radius: 6px;
+      color: #444;
+    }
+    .reaction-btn:hover { background: #fff8d0; }
+    /* intentional mismatched colour on one button per panel */
+    .reaction-btn.odd {
+      color: var(--color-strike);
+      border-color: var(--color-strike);
+      background: #fff0ee;
+    }
+
+    .intent-section {
+      max-width: 720px;
+      margin: 56px auto 0;
+      padding: 16px 20px 18px;
+      background: #fffbe8;
+      border: 1.5px dashed #b8a868;
+      border-radius: 8px;
+    }
+    .intent-section h2 {
+      margin: 0 0 6px;
+      font-size: 24px;
+      transform: rotate(-0.3deg);
+      display: inline-block;
+    }
+    .intent-section p { margin: 5px 0; font-size: 17px; }
+    .intent-section code {
+      background: #f3eed8;
+      padding: 0 4px;
+      font-size: 14px;
+      font-family: monospace;
+    }
+
+    .watermark {
+      position: fixed;
+      bottom: 8px;
+      right: 14px;
+      color: #b0b0a8;
+      font-size: 13px;
+      font-family: monospace;
+      pointer-events: none;
+      letter-spacing: 0.3px;
+    }
+  </style>
+</head>
+<body>
+  <!-- TODO: 把"操作员预测会喜欢哪个 voice" vs "实际反馈" 的对比补到第二轮 demo -->
+  <!-- TODO: 现在只有 session 开场白; 等反馈后再补 "用户已经选了 preset X、第 3 轮长什么样" 的样子 -->
+
+  <header class="page-head">
+    <h1 class="page-title">Pensees — <del>voice demo v0</del> <del>v0.1</del> 3 个 preset 试听对比 <span style="font-size:18px;color:var(--color-warn);transform:rotate(-1deg);display:inline-block;">+ F-30 + F-31 patch (v0.2)</span></h1>
+    <p class="subtitle">同一句模糊想法,3 种风格的回应。</p>
+    <div class="sticky-note">DRAFT — please critique, not approve.</div>
+  </header>
+
+  <main class="grid">
+
+    <!-- Panel 1: Exploratory (default) -->
+    <section class="panel p-1">
+      <div class="panel-header">
+        <span class="preset-name exploratory">Exploratory</span>
+        <span class="badge">默认 · 温和探索</span>
+      </div>
+      <span class="trigger-hint">trigger: "让我们探索" / "我还没想清楚"</span>
+
+      <div class="bubble user">
+        我想做一个工具,帮自己和团队把模糊的想法变成清晰的需求。但我不太确定它应该长什么样、应该多智能、应该跟现有工具怎么配合。
+      </div>
+
+      <div class="bubble agent">
+        <p><b>听到的是:</b> 你想做一个"模糊想法 → 清晰需求"的工具,但 <b>形态</b>、<b>智能程度</b>、<b>跟现有工具的关系</b> 这三个方向都还没定。是这个意思吗?</p>
+
+        <span class="flag">⚠️ 顺便:你说的 <b>"清晰"</b> —— 是指"自己看得懂",还是"团队/第三方独立都能复述"?这个词后面会反复出现,先约定一下。</span>
+
+        <p>先挑一个最想先聊的入口(一次一个):</p>
+        <ul>
+          <li>(a) <b>形态</b> —— SKILL 包 / CLI / 聊天 bot / Web app</li>
+          <li>(b) <b>智能程度</b> —— 自己出方案,还是只问问题、推你思考</li>
+          <li>(c) <b>与现有工具的关系</b> —— "前置阶段",还是替代品</li>
+          <li>(d) 都不是 —— 让我自己描述。</li>
+          <li style="color:var(--color-warn);"><b>(e) 我想先详细听 (X) 这个选项再决定</b> —— 我用 4 节(后果/对比/场景/未知, ≤350 字)详解 X, 然后回到原题。<span style="font-size:14px;color:var(--color-faint);">⟵ F-31 新增</span></li>
+        </ul>
+      </div>
+
+      <!-- F-31 inline unfold sketch: if user said "(e) 详细 (a)", Pensees would respond like this -->
+      <div class="bubble agent f31-sketch" style="border:2px dashed var(--color-warn); transform:rotate(0.3deg); background:#fff8e6;">
+        <p style="margin:0 0 6px;"><b style="color:var(--color-warn);">假设你刚说: "(e) 详细 (a)"</b> · 我会回:</p>
+        <p style="margin:4px 0;"><b>后果</b>: 选 SKILL 包 → 写一份 ~250 行 SKILL.md + references/ 重资料; 用户的 Claude/Cursor/Codex agent 自动加载; 你不持有 inference key。</p>
+        <p style="margin:4px 0;"><b>对比</b>: vs CLI = 需用户 alias 安装且无 agent 上下文; vs 聊天 bot = 要 host inference 且失 BYOCC 姿态。</p>
+        <p style="margin:4px 0;"><b>场景</b>: 工程师/设计师本就在用 Cursor 写需求 — 加载 Pensees 零摩擦最大。**反场景**: 不用 agent IDE 的纯文字工作者(写小说/做研究) — SKILL 包形态会卡住。</p>
+        <p style="margin:4px 0;"><b>未知</b>: 三家 agent 加载约定 2026 会不会再分裂; 兼容性需持续测。</p>
+        <p style="margin:8px 0 0;font-size:14px;color:var(--color-faint);">→ 接着我会 re-emit 原题, 选项末尾追加 <code>(f) 已了解 (a), 再问 (b)</code>。</p>
+      </div>
+
+      <div class="panel-footer">
+        <button class="reaction-btn" data-msg="like-exploratory">I like this voice</button>
+        <button class="reaction-btn" data-msg="too-soft">太软了</button>
+        <button class="reaction-btn odd" data-msg="not-enough-structure">结构不够</button>
+        <button class="reaction-btn" data-msg="f31-unfold-clear">F-31 4 节够用</button>
+      </div>
+    </section>
+
+    <!-- Panel 2: Challenge -->
+    <section class="panel p-2">
+      <div class="panel-header">
+        <span class="preset-name challenge">Challenge</span>
+        <span class="badge">怀疑 · 戳漏洞</span>
+      </div>
+      <span class="trigger-hint">trigger: "挑战这个" / "戳一下漏洞" / "pre-mortem"</span>
+
+      <div class="bubble user">
+        我想做一个工具,帮自己和团队把模糊的想法变成清晰的需求。但我不太确定它应该长什么样、应该多智能、应该跟现有工具怎么配合。
+      </div>
+
+      <div class="bubble agent">
+        <p><b>先 steel-man:</b> "模糊 → 清晰" 的对话式工具是真问题 —— 2026 ClarifyMT 已经证明 LLM 普遍欠澄清(10/10 models 全跌);赛道有真需求。</p>
+
+        <p><b>但 pre-mortem 一下 —— 假设 6 个月后你宣布失败了,</b>最可能死在这三处:</p>
+        <ul>
+          <li>1. <span class="pre-em">领域绑定陷阱</span> —— "自己和团队" 大概率团队 = 程序员,最后又是一个 spec-writer,OpenSpec / Spec Kit 已经占位 —— 你拿什么差异化?</li>
+          <li>2. <span class="pre-em">价值幻觉</span> —— 用户问 5 轮就累了;怎么证明它不是"加了对话外壳的 ChatGPT"?</li>
+          <li>3. <span class="pre-em">"没人会用它"悖论</span> —— 能把模糊想法变清晰的人不需要工具;需要工具的人懒得多答 5 轮。</li>
+        </ul>
+
+        <p>哪一条你最想先答?三条都答不出 —— 我们就回头改 idea。</p>
+
+        <p style="color:var(--color-warn);font-size:18px;margin-top:8px;"><b>(e) 我想先详细听 (1) / (2) / (3) 这个失败模式</b> —— 我先 4 节(后果/对比/场景/未知)展开那条失败模式, 你再选答哪条。 <span style="font-size:14px;color:var(--color-faint);">⟵ F-31 也在 Challenge 模式生效</span></p>
+      </div>
+
+      <div class="panel-footer">
+        <button class="reaction-btn" data-msg="like-challenge">I like this voice</button>
+        <button class="reaction-btn odd" data-msg="too-hard">太硬了</button>
+        <button class="reaction-btn" data-msg="more-specific">不够具体</button>
+      </div>
+    </section>
+
+    <!-- Panel 3: Convergence -->
+    <section class="panel p-3">
+      <div class="panel-header">
+        <span class="preset-name convergence">Convergence</span>
+        <span class="badge">收敛 · 锁结果</span>
+      </div>
+      <span class="trigger-hint">trigger: "让我们收敛" / "锁一下" / "把它写下来"</span>
+
+      <div class="bubble user">
+        我想做一个工具,帮自己和团队把模糊的想法变成清晰的需求。但我不太确定它应该长什么样、应该多智能、应该跟现有工具怎么配合。
+      </div>
+
+      <div class="bubble agent">
+        <p>直接进 <b>Goal phase</b>。先按 <b>8-bucket scan</b> 过一遍 (functional / data / UX / non-functional / integration / edge / constraints / terminology),再锁第一个最小 Goal。</p>
+
+        <p><b>扫描 teaser —— 3 个高影响 bucket 命中:</b></p>
+        <ul>
+          <li><span class="conv-em">terminology ⚠️</span> "清晰需求" / "智能" / "配合" 三个词未定义</li>
+          <li><span class="conv-em">constraints ⚠️</span> "自己和团队" 边界不明(团队多大 / 是否限程序员)</li>
+          <li><span class="conv-em">integration ⚠️</span> "现有工具" 没说具体哪几个(OpenSpec / Notion / Cursor / ...)</li>
+        </ul>
+
+        <p><b>Goal 问题(先答这一个就够了):</b> 到了 <b>哪一天 / 你能观察到什么具体现象</b>,你会说"这个工具做成了"?</p>
+
+        <p class="example-line">示例:"5 月底,我自己用它跑完 1 个真实模糊想法,30 分钟内拿到能交给团队 review 的 spec" —— 给我一句你的版本,越具体越好。</p>
+      </div>
+
+      <div class="panel-footer">
+        <button class="reaction-btn" data-msg="like-convergence">I like this voice</button>
+        <button class="reaction-btn" data-msg="too-tight">太赶了</button>
+        <button class="reaction-btn odd" data-msg="no-warmth">不够温度</button>
+      </div>
+    </section>
+
+  </main>
+
+  <section class="intent-section">
+    <h2>本 demo 的意图</h2>
+    <p>这是一个 <b>meta</b> demo —— 操作员正在设计 Pensees,demo 演示的恰好是"如果今天 Pensees 已经做出来,它会怎么回应你这句话"。</p>
+    <p>请<b>不要</b>评论字体粗细、按钮颜色、布局对齐 —— 这些是故意粗糙的(见 <code>glossary.md</code> "visibly-rough demo")。</p>
+    <p>请<b>评论 voice</b>:哪种回应方式最贴近你的真实需要?默认应该落在哪个 preset?哪些措辞让你想反驳"我才不会被这么问"?</p>
+  </section>
+
+  <!-- v0.2 patch: F-30 + F-31 surface notes -->
+  <section class="served-via" style="max-width:1200px;margin:18px auto 0;padding:14px 18px;border:2px dashed var(--color-faint);background:#fffdf6;transform:rotate(-0.2deg);">
+    <h2 style="margin:0 0 6px;font-size:22px;color:var(--color-faint);">v0.2 patch: F-30 + F-31 在哪儿</h2>
+    <ul style="margin:0;font-size:17px;line-height:1.5;">
+      <li><b>F-30 本地预览端口</b>: 你大概率是双击 <code>file://</code> 打开的 — 或者通过 <code>http://127.0.0.1:8765/</code> 看的(L0 已 spawn 了一个临时 server)。在<b>真</b> Pensees 跑起来后, 它会主动问 <code>y/N/s/p</code> 让你选 — 默认 <code>N</code> 即 file://。</li>
+      <li><b>F-31 选项详解通道</b>: 上面 Exploratory + Challenge 两 panel 末尾的橙色 <code>(e)</code> 选项是新加的。Exploratory panel 还多了一个 <span style="background:#fff8e6;padding:2px 4px;border:1px dashed var(--color-warn);">虚线橙色框</span> 演示 "你选了 (e) 详细 (a) 后 Pensees 实际会回什么样" — 4 节(后果/对比/场景/未知, ≤ 350 字)。Convergence panel 是 free-text 题, F-31 不适用。</li>
+      <li><b>没改的地方</b>: 用户消息、Exploratory/Challenge/Convergence 原始回复、3 个 reaction 按钮的前 3 个、aesthetic — 这次 patch 是<b>增量叠加</b>而非重写。</li>
+    </ul>
+  </section>
+
+  <div class="watermark">DRAFT — generated 2026-05-18; v0.2 patched same day (F-30 + F-31)</div>
+
+  <script>
+    document.querySelectorAll('.reaction-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var msg = btn.getAttribute('data-msg');
+        alert('TODO: wire to session log — feedback="' + msg + '"\n' +
+              '(目前只是 sketch,不会真的写入 transcript.md)');
+      });
+    });
+  </script>
+</body>
+</html>

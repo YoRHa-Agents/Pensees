@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title data-i18n="meta.title.index">Pensees - the skill that walks fuzzy ideas into verifiable specs</title>
+<meta name="description" data-i18n="meta.tagline" data-i18n-attr="content" content="A skill that walks fuzzy ideas into verifiable specs." />
+<script>
+  (function () {
+    try {
+      var saved = localStorage.getItem("pensees.theme");
+      var dark  = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+      var theme = saved || (dark ? "night" : "day");
+      document.documentElement.setAttribute("data-theme", theme);
+
+      var savedLang = localStorage.getItem("pensees.lang");
+      var navLang   = (navigator.language || "en").toLowerCase();
+      var lang      = savedLang || (navLang.indexOf("zh") === 0 ? "zh" : "en");
+      document.documentElement.lang = (lang === "zh") ? "zh-CN" : "en";
+    } catch (e) {
+      console.warn("[pensees] no-FOUC bootstrap fell back to defaults:", e);
+      document.documentElement.setAttribute("data-theme", "day");
+      document.documentElement.lang = "en";
+    }
+  })();
+</script>
+<link rel="stylesheet" href="styles.css" />
+<script src="i18n.js" defer></script>
+<script src="theme.js" defer></script>
+</head>
+<body>
+<a class="skip-link" href="#main" data-i18n="skip.to_main">Skip to main content</a>
+
+<!-- HEADER START -->
+<header class="site-header" role="banner">
+  <div class="site-header__row">
+    <div class="site-header__brand">
+      <svg class="yorha-mark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" role="img" aria-label="YoRHa-style mark"><rect x="3" y="3" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="7" y="7" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+      <span class="site-header__title" data-i18n-skip>PENSEES</span>
+      <span class="site-header__version" aria-hidden="true" data-i18n-skip></span>
+    </div>
+    <nav class="site-nav" aria-label="primary">
+      <a href="index.html" class="is-active" data-i18n="nav.home">[ HOME ]</a>
+      <a href="demo.html" data-i18n="nav.demo">[ DEMO ]</a>
+      <a href="https://github.com/YoRHa-Agents/Pensees" target="_blank" rel="noopener" data-i18n="nav.github">[ GITHUB &#x2197; ]</a>
+    </nav>
+    <nav class="toggles" data-i18n="nav.toggles_label" data-i18n-attr="aria-label" aria-label="site preferences">
+      <button type="button" data-i18n-toggle aria-pressed="false" data-i18n="toggle.lang" data-i18n-attr="aria-label" aria-label="Switch language">[ ZH | EN ]</button>
+      <button type="button" data-theme-toggle aria-pressed="false" data-i18n="toggle.theme.day" data-i18n-attr="aria-label" aria-label="Switch theme">&#x2600; DAY</button>
+    </nav>
+  </div>
+  <hr class="ascii-divider" />
+</header>
+<!-- HEADER END -->
+
+<main id="main">
+
+  <section class="hero">
+    <h1 data-i18n="hero.title">Pensees</h1>
+    <p class="hero__subtitle" data-i18n="hero.subtitle">A skill that walks one fuzzy idea into one verifiable spec, one question at a time.</p>
+    <pre>curl -fsSL https://yorha-agents.github.io/Pensees/get.sh | sh</pre>
+    <p class="muted" data-i18n="hero.curl_caption">Install in 30 seconds.</p>
+    <div class="hero__cta">
+      <a href="https://github.com/YoRHa-Agents/Pensees/blob/main/docs/QUICK_GUIDE.md" target="_blank" rel="noopener" data-i18n="hero.cta_guide">[ READ THE GUIDE ]</a>
+      <a href="demo.html" data-i18n="hero.cta_demo">[ SEE A DEMO &#x2192; ]</a>
+    </div>
+  </section>
+
+  <section class="problem">
+    <h2 data-i18n="problem.heading">Why this exists</h2>
+    <ul>
+      <li data-i18n="problem.item_a">Status-quo agents jump to a plan dump on the first vague prompt.</li>
+      <li data-i18n="problem.item_b">Pensees stops, names the ambiguity, and asks one structured question.</li>
+      <li data-i18n="problem.item_c">A 7-row checklist gates the final deliverable; no deliverable until the user explicitly approves.</li>
+    </ul>
+  </section>
+
+  <section class="three-steps three-steps--compact">
+    <h2 data-i18n="steps.heading" style="grid-column:1/-1">Three steps</h2>
+    <article class="three-steps__step">
+      <h3 data-i18n="steps.s1_title">1. Fuzzy idea</h3>
+      <p data-i18n="steps.s1_body">"Help me design a small CLI for X" - ambiguity surfaced.</p>
+    </article>
+    <article class="three-steps__step">
+      <h3 data-i18n="steps.s2_title">2. One question at a time</h3>
+      <p data-i18n="steps.s2_body">Structured multiple-choice with (d) none of these and (e) detail (X) first.</p>
+    </article>
+    <article class="three-steps__step">
+      <h3 data-i18n="steps.s3_title">3. Verifiable spec</h3>
+      <p data-i18n="steps.s3_body">After 7 checklist rows turn ok and you approve, two files land in .local/pensees/.</p>
+    </article>
+  </section>
+
+  <section class="hosts">
+    <h2 data-i18n="hosts.heading">Works inside</h2>
+    <div class="hosts__chips">
+      <span data-i18n="hosts.cursor">[ Cursor ]</span>
+      <span data-i18n="hosts.claude">[ Claude Code ]</span>
+      <span data-i18n="hosts.codex">[ Codex CLI ]</span>
+    </div>
+    <p class="muted" data-i18n="hosts.note">Manual trigger only. Pensees does not autoload for routine planning.</p>
+  </section>
+
+  <section class="install install--minimal">
+    <h2 data-i18n="install.heading">Install in 30 seconds</h2>
+    <div class="install__block">
+      <div class="install__block-head">
+        <span class="install__block-label" data-i18n="install.primary_label">Recommended (curl)</span>
+        <span class="install__block-caption" data-i18n="install.primary_caption">One line, no clone, no build step.</span>
+      </div>
+      <pre>curl -fsSL https://yorha-agents.github.io/Pensees/get.sh | sh</pre>
+    </div>
+    <p>
+      <a href="demo.html#install" data-i18n="install.more_link">[ MORE INSTALL OPTIONS &#x2192; ]</a>
+    </p>
+  </section>
+
+  <section class="privacy">
+    <h2 data-i18n="privacy.heading">Privacy and provenance</h2>
+    <ul>
+      <li data-i18n="privacy.item_a">No telemetry.</li>
+      <li data-i18n="privacy.item_b">No outbound API calls.</li>
+      <li data-i18n="privacy.item_c">No keys stored.</li>
+      <li data-i18n="privacy.item_d">Emergency stop: say `&#x9500;&#x6BC1;&#x672C;&#x4F1A;&#x8BDD;` / `forget this` / `wipe session`.</li>
+    </ul>
+  </section>
+
+  <section class="next">
+    <h2 data-i18n="next.heading">Read next</h2>
+    <div class="next__cards">
+      <article class="next__card">
+        <a href="https://github.com/YoRHa-Agents/Pensees/blob/main/docs/QUICK_GUIDE.md" target="_blank" rel="noopener" data-i18n="next.quick_title">Quick Guide (5 min) &#x2192;</a>
+        <p class="next__card-caption" data-i18n="next.quick_caption">The smallest tour that gets you a successful first session.</p>
+      </article>
+      <article class="next__card">
+        <a href="https://github.com/YoRHa-Agents/Pensees/blob/main/docs/USER_GUIDE.md" target="_blank" rel="noopener" data-i18n="next.user_title">User Guide (deeper) &#x2192;</a>
+        <p class="next__card-caption" data-i18n="next.user_caption">Per-host quirks, all dialogue rules, every escape hatch.</p>
+      </article>
+    </div>
+  </section>
+
+</main>
+
+<!-- FOOTER START -->
+<footer class="site-footer" role="contentinfo">
+  <hr class="ascii-divider" />
+  <p class="site-footer__line" data-i18n-skip>Pensees v0.3.0 &middot; MIT license &middot; <a href="https://github.com/YoRHa-Agents/Pensees" target="_blank" rel="noopener">github.com/YoRHa-Agents/Pensees</a></p>
+  <p class="site-footer__line" data-i18n="footer.privacy">&gt; Built offline-first. No telemetry. No keys. No cookies.</p>
+</footer>
+<!-- FOOTER END -->
+
+</body>
+</html>
