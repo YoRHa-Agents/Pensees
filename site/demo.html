@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title data-i18n="meta.title.demo">Pensees - walkthrough and demo</title>
+<meta name="description" data-i18n="meta.tagline" data-i18n-attr="content" content="A skill that walks fuzzy ideas into verifiable specs." />
+<script>
+  (function () {
+    try {
+      var saved = localStorage.getItem("pensees.theme");
+      var dark  = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+      var theme = saved || (dark ? "night" : "day");
+      document.documentElement.setAttribute("data-theme", theme);
+
+      var savedLang = localStorage.getItem("pensees.lang");
+      var navLang   = (navigator.language || "en").toLowerCase();
+      var lang      = savedLang || (navLang.indexOf("zh") === 0 ? "zh" : "en");
+      document.documentElement.lang = (lang === "zh") ? "zh-CN" : "en";
+    } catch (e) {
+      console.warn("[pensees] no-FOUC bootstrap fell back to defaults:", e);
+      document.documentElement.setAttribute("data-theme", "day");
+      document.documentElement.lang = "en";
+    }
+  })();
+</script>
+<link rel="stylesheet" href="styles.css" />
+<script src="i18n.js" defer></script>
+<script src="theme.js" defer></script>
+</head>
+<body>
+<a class="skip-link" href="#main" data-i18n="skip.to_main">Skip to main content</a>
+
+<!-- HEADER START -->
+<header class="site-header" role="banner">
+  <div class="site-header__row">
+    <div class="site-header__brand">
+      <svg class="yorha-mark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" role="img" aria-label="YoRHa-style mark"><rect x="3" y="3" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="7" y="7" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+      <span class="site-header__title" data-i18n-skip>PENSEES</span>
+      <span class="site-header__version" aria-hidden="true" data-i18n-skip></span>
+    </div>
+    <nav class="site-nav" aria-label="primary">
+      <a href="index.html" data-i18n="nav.home">[ HOME ]</a>
+      <a href="demo.html" class="is-active" data-i18n="nav.demo">[ DEMO ]</a>
+      <a href="https://github.com/YoRHa-Agents/Pensees" target="_blank" rel="noopener" data-i18n="nav.github">[ GITHUB &#x2197; ]</a>
+    </nav>
+    <nav class="toggles" data-i18n="nav.toggles_label" data-i18n-attr="aria-label" aria-label="site preferences">
+      <button type="button" data-i18n-toggle aria-pressed="false" data-i18n="toggle.lang" data-i18n-attr="aria-label" aria-label="Switch language">[ ZH | EN ]</button>
+      <button type="button" data-theme-toggle aria-pressed="false" data-i18n="toggle.theme.day" data-i18n-attr="aria-label" aria-label="Switch theme">&#x2600; DAY</button>
+    </nav>
+  </div>
+  <hr class="ascii-divider" />
+</header>
+<!-- HEADER END -->
+
+<main id="main">
+
+  <section class="whatdoes three-steps three-steps--expanded">
+    <h1 data-i18n="whatdoes.heading" style="grid-column:1/-1">What Pensees does</h1>
+    <article class="three-steps__step">
+      <h3 data-i18n="steps.s1_title">1. Fuzzy idea</h3>
+      <p data-i18n="whatdoes.s1_body_long">You arrive with a half-formed idea you cannot yet hand to anyone. Pensees stops, restates what it heard, and names the ambiguities (linguistic, intent, contextual, epistemic, interactional). No plan dump on turn one.</p>
+    </article>
+    <article class="three-steps__step">
+      <h3 data-i18n="steps.s2_title">2. One question at a time</h3>
+      <p data-i18n="whatdoes.s2_body_long">Each Pensees turn ends with at most one question mark. Multiple-choice options always include (d) none of these, let me describe and (e) I want option (X) detailed first - so you stay in control of the dialogue's depth.</p>
+    </article>
+    <article class="three-steps__step">
+      <h3 data-i18n="steps.s3_title">3. Verifiable spec</h3>
+      <p data-i18n="whatdoes.s3_body_long">When the 7-row convergence checklist is fully green and you reply with an explicit approval token, Pensees emits requirements.md and acceptance-criteria.md under .local/pensees/{date}-{slug}/outputs/. Anything else is forbidden by the HARD-GATE rule (F-14).</p>
+    </article>
+  </section>
+
+  <section class="realsession" id="realsession">
+    <h2 data-i18n="realsession.heading">See a real session</h2>
+    <figure class="embedded-demo">
+      <figcaption data-i18n="realsession.caption">This is the actual offline demo emitted during the Pensees self-design session on 2026-05-18.</figcaption>
+      <iframe src="embedded-demos/01-preset-voice-comparison.html"
+              title="Pensees preset voice comparison demo"
+              loading="lazy"
+              sandbox="allow-scripts"
+              referrerpolicy="no-referrer"></iframe>
+      <div class="embedded-demo-actions">
+        <a href="embedded-demos/01-preset-voice-comparison.html" target="_blank" rel="noopener" data-i18n="realsession.open_new_tab">[ OPEN IN NEW TAB &#x2197; ]</a>
+      </div>
+    </figure>
+  </section>
+
+  <section class="install install--full" id="install">
+    <h2 data-i18n="install.heading">Install in 30 seconds</h2>
+
+    <div class="install__block">
+      <div class="install__block-head">
+        <span class="install__block-label" data-i18n="install.primary_label">Recommended (curl)</span>
+        <span class="install__block-caption" data-i18n="install.primary_caption">One line, no clone, no build step.</span>
+      </div>
+      <pre>curl -fsSL https://yorha-agents.github.io/Pensees/get.sh | sh</pre>
+      <p class="install__copy">
+        <button type="button" class="install__copy-btn" data-copy-target="prev-pre" data-i18n="install.copy_button">[ COPY ]</button>
+      </p>
+      <p class="install__verify"><span data-i18n="install.dev_caption">Dev fallback (uses bash, not sh):</span></p>
+      <pre>curl -fsSL https://yorha-agents.github.io/Pensees/get.sh | bash</pre>
+      <p class="install__verify"><span data-i18n="install.verify_caption">Verify the symlink landed:</span></p>
+      <pre>ls "$HOME/.cursor/skills-cursor/pensees"</pre>
+    </div>
+
+    <details class="install__alt">
+      <summary data-i18n="install.secondary_label">Alternative (git clone)</summary>
+      <p class="muted" data-i18n="install.secondary_caption">If you would rather hold a local checkout.</p>
+      <pre>git clone https://github.com/YoRHa-Agents/Pensees.git
+cd Pensees
+./install.sh</pre>
+      <p class="install__copy">
+        <button type="button" class="install__copy-btn" data-copy-target="prev-pre" data-i18n="install.copy_button">[ COPY ]</button>
+      </p>
+    </details>
+
+    <details class="install__alt">
+      <summary data-i18n="install.fallback_label">Manual symlink fallback</summary>
+      <p class="muted" data-i18n="install.fallback_caption">When install.sh cannot reach your home directory.</p>
+      <pre>mkdir -p "$HOME/.cursor/skills-cursor"
+ln -snf "$PWD/skill" "$HOME/.cursor/skills-cursor/pensees"
+mkdir -p "$HOME/.claude/skills"
+ln -snf "$PWD/skill" "$HOME/.claude/skills/pensees"
+mkdir -p "$HOME/.codex/skills"
+ln -snf "$PWD/skill" "$HOME/.codex/skills/pensees"</pre>
+      <p class="install__copy">
+        <button type="button" class="install__copy-btn" data-copy-target="prev-pre" data-i18n="install.copy_button">[ COPY ]</button>
+      </p>
+    </details>
+  </section>
+
+  <section class="triggers">
+    <h2 data-i18n="triggers.heading">Trigger phrases</h2>
+    <p class="muted" data-i18n="triggers.note">Pensees is intentionally non-greedy. Without one of these phrases, it stays asleep.</p>
+    <!-- mirror of skill/SKILL.md frontmatter; update both when changing -->
+    <table class="triggers__table">
+      <thead>
+        <tr>
+          <th data-i18n="triggers.col_zh">Chinese triggers</th>
+          <th data-i18n="triggers.col_en">English triggers</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>pensees</td><td>pensees</td></tr>
+        <tr><td>&#x6A21;&#x7CCA;&#x7684;&#x60F3;&#x6CD5;</td><td>fuzzy thought</td></tr>
+        <tr><td>&#x5E2E;&#x6211;&#x60F3;&#x6E05;&#x695A;</td><td>help me think through</td></tr>
+        <tr><td>&#x7406;&#x4E00;&#x4E0B;&#x9700;&#x6C42;</td><td>clarify requirements</td></tr>
+        <tr><td>&#x505A;&#x9700;&#x6C42;&#x6F84;&#x6E05;</td><td>elicit</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="output">
+    <h2 data-i18n="output.heading">Where output lands</h2>
+    <p class="muted" data-i18n="output.caption">Every session lives under one date-slug directory; nothing escapes it.</p>
+    <pre>.local/
+  pensees/
+    INDEX.md
+    .audit/
+      destruction.log
+    {YYYY-MM-DD}-{slug}/
+      transcript.md
+      ontology.yaml
+      checklist-status.md
+      demos/
+        01-{topic}-A.html
+        01-{topic}-B.html
+      outputs/
+        requirements.md
+        acceptance-criteria.md</pre>
+  </section>
+
+  <section class="next">
+    <h2 data-i18n="next.heading">Read next</h2>
+    <div class="next__cards">
+      <article class="next__card">
+        <a href="https://github.com/YoRHa-Agents/Pensees/blob/main/docs/QUICK_GUIDE.md" target="_blank" rel="noopener" data-i18n="next.quick_title">Quick Guide (5 min) &#x2192;</a>
+        <p class="next__card-caption" data-i18n="next.quick_caption">The smallest tour that gets you a successful first session.</p>
+      </article>
+      <article class="next__card">
+        <a href="https://github.com/YoRHa-Agents/Pensees/blob/main/docs/USER_GUIDE.md" target="_blank" rel="noopener" data-i18n="next.user_title">User Guide (deeper) &#x2192;</a>
+        <p class="next__card-caption" data-i18n="next.user_caption">Per-host quirks, all dialogue rules, every escape hatch.</p>
+      </article>
+    </div>
+  </section>
+
+</main>
+
+<!-- FOOTER START -->
+<footer class="site-footer" role="contentinfo">
+  <hr class="ascii-divider" />
+  <p class="site-footer__line" data-i18n-skip>Pensees v0.3.0 &middot; MIT license &middot; <a href="https://github.com/YoRHa-Agents/Pensees" target="_blank" rel="noopener">github.com/YoRHa-Agents/Pensees</a></p>
+  <p class="site-footer__line" data-i18n="footer.privacy">&gt; Built offline-first. No telemetry. No keys. No cookies.</p>
+</footer>
+<!-- FOOTER END -->
+
+<script>
+  (function () {
+    var btns = document.querySelectorAll(".install__copy-btn");
+    for (var i = 0; i < btns.length; i++) {
+      var b = btns[i];
+      if (b.dataset.copyBound === "1") { continue; }
+      b.dataset.copyBound = "1";
+      b.addEventListener("click", function (ev) {
+        var btn = ev.currentTarget;
+        var pre = btn.parentNode && btn.parentNode.previousElementSibling;
+        while (pre && pre.tagName !== "PRE") { pre = pre.previousElementSibling; }
+        if (!pre) { return; }
+        var text = pre.textContent || "";
+        var ok = false;
+        if (navigator.clipboard && typeof navigator.clipboard.writeText === "function") {
+          navigator.clipboard.writeText(text).then(function () {
+            btn.setAttribute("data-i18n", "install.copy_button");
+            if (window.PenseesI18n) { window.PenseesI18n.applyAll(btn); }
+          }, function (err) {
+            console.warn("[pensees] clipboard write failed; falling back to manual select:", err);
+            selectFallback(pre, btn);
+          });
+          ok = true;
+        }
+        if (!ok) { selectFallback(pre, btn); }
+      });
+    }
+    function selectFallback(pre, btn) {
+      try {
+        var range = document.createRange();
+        range.selectNodeContents(pre);
+        var sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+        btn.setAttribute("data-i18n", "install.copy_button_manual");
+        if (window.PenseesI18n) { window.PenseesI18n.applyAll(btn); }
+      } catch (e) {
+        console.warn("[pensees] manual selection fallback failed:", e);
+        btn.setAttribute("data-i18n", "install.copy_button_manual");
+        if (window.PenseesI18n) { window.PenseesI18n.applyAll(btn); }
+      }
+    }
+  })();
+</script>
+
+</body>
+</html>

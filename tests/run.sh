@@ -24,6 +24,8 @@ chmod +x \
   tests/lint-frontmatter.sh \
   tests/lint-references.sh \
   tests/test-lint-templates.sh \
+  tests/lint-site.sh \
+  tests/smoke-curl-install.sh \
   2>/dev/null || true
 
 overall_rc=0
@@ -52,6 +54,8 @@ run_step "lint-deliverable-templates"  tests/lint-deliverable-templates.sh
 run_step "lint-frontmatter"            tests/lint-frontmatter.sh
 run_step "lint-references"             tests/lint-references.sh
 run_step "test-lint-templates"         tests/test-lint-templates.sh
+run_step "lint-site"                   tests/lint-site.sh
+run_step "smoke-curl-install"          tests/smoke-curl-install.sh
 
 echo
 echo "===================================================================="

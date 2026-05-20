@@ -1,5 +1,9 @@
 # Pensees
 
+A skill that walks one fuzzy idea into one verifiable spec, one question at a time.
+
+Pensees 是一个领域中性的"想法澄清"技能包。中文用户请看 [docs/QUICK_GUIDE.zh.md](docs/QUICK_GUIDE.zh.md)。
+
 Pensees is a domain-neutral skill package that helps a host agent (Cursor /
 Claude Code / Codex CLI) walk a user from "a fuzzy idea" to "a
 third-party-verifiable spec" through one-question-at-a-time dialogue plus
@@ -7,40 +11,45 @@ on-demand 2–3 variant single-file HTML demos. Pensees holds no inference API
 keys; the host agent does the thinking, Pensees holds the contract and the
 templates.
 
-The skill is invoked manually — say "pensees", "帮我想清楚", "clarify
-requirements", or one of the trigger phrases listed in `skill/SKILL.md`. It
-does not autoload for routine planning.
-
-## Behavior preview
-
-| # | Status-quo chat | Pensees |
-|---|---|---|
-| V-01 | "Design X for me" → immediate plan dump | Detects fuzzy words → asks one structured question first |
-| V-02 | Bundles 3–5 questions per turn | Strict one-question-at-a-time |
-| V-03 | After ~5 turns, summarizes and ships | Stays in dialogue until 7-row checklist is green AND user explicitly approves |
-
-## Quick start
+## Install
 
 ```bash
-git clone <this-repo> pensees
+curl -fsSL https://yorha-agents.github.io/Pensees/get.sh | sh
+```
+
+After install, open Cursor / Claude Code / Codex CLI and send a message
+containing one of the trigger phrases (`pensees`, `帮我想清楚`, ...). The
+skill is invoked manually — it does not autoload for routine planning.
+
+Verify:
+
+```bash
+ls "$HOME/.cursor/skills-cursor/pensees"
+```
+
+<details>
+<summary>Install via <code>git clone</code> (existing path, fully supported)</summary>
+
+```bash
+git clone https://github.com/YoRHa-Agents/Pensees pensees
 cd pensees
 ./install.sh                  # symlinks ./skill into all 3 default target dirs
 ```
 
-After install, open Cursor / Claude Code / Codex CLI and send a message
-containing one of the trigger phrases (`pensees`, `帮我想清楚`, ...).
-
-### Other install modes
+Other install modes:
 
 ```bash
 ./install.sh --dry-run                       # show the plan, do nothing
-./install.sh --target=claude                 # single-target only
-./install.sh --workspace ~/my-side-project   # install to a non-$HOME root
+./install.sh --target=claude                 # single-target only (cursor|claude|codex)
+./install.sh --workspace ~/my-side-project   # install under a non-$HOME root
 ./install.sh --copy                          # copy instead of symlink
 ./install.sh --uninstall                     # remove (refuses unrelated paths)
 ```
 
-### Manual fallback (if `install.sh` does not fit your setup)
+</details>
+
+<details>
+<summary>Manual symlink fallback (if <code>install.sh</code> does not fit your setup)</summary>
 
 ```bash
 ln -s "$PWD/skill" ~/.claude/skills/pensees
@@ -48,43 +57,37 @@ ln -s "$PWD/skill" ~/.cursor/skills-cursor/pensees
 ln -s "$PWD/skill" ~/.codex/skills/pensees
 ```
 
-### Troubleshooting
+Some Cursor setups expect the path `~/.cursor/skills/pensees` (no `-cursor`
+suffix). If autoload fails, also create that link:
+`ln -s "$PWD/skill" ~/.cursor/skills/pensees`.
 
-- **Cursor does not autoload after install.** Some Cursor setups expect
-  the path `~/.cursor/skills/pensees` (no `-cursor` suffix). If autoload
-  fails, also create that link:
-  `ln -s "$PWD/skill" ~/.cursor/skills/pensees`.
-- **No agent picks it up at all.** Confirm the trigger phrase made it
-  into the message — Pensees is intentionally non-greedy and will not
-  load for generic "plan / brainstorm / help" without the trigger word.
-- **Local preview server fails.** Pensees needs `python3` on PATH for the
-  optional `8765`-port preview (F-30). If `python3` is missing, the
-  skill explicitly refuses to silently fall back; open the HTML file via
-  `file://` instead.
+</details>
 
-## What ships in `skill/`
+## What is Pensees
 
-```
-skill/
-├── SKILL.md                  # 246-line behavior contract (the entrypoint)
-├── references/               # lazy-loaded — agent reads only what it needs
-│   ├── styles.md
-│   ├── ambiguity-taxonomy.md
-│   ├── question-forms.md
-│   ├── demo-decision-tree.md
-│   ├── checklist-rubric.md
-│   ├── methods.csv
-│   └── ontology-schema.md
-├── templates/
-│   ├── demo-decision-matrix.html
-│   ├── demo-mockup.html
-│   ├── demo-explorable.html
-│   ├── demo-forced-choice.html
-│   ├── requirements.template.md
-│   └── acceptance-criteria.template.md
-└── examples/
-    └── example-non-software-session.md
-```
+The skill is invoked manually — say `pensees`, `帮我想清楚`,
+`clarify requirements`, `做需求澄清`, `理一下需求`, or one of the trigger
+phrases listed in `skill/SKILL.md`. Pensees is intentionally non-greedy:
+without one of those phrases it stays asleep. It runs one-question-at-a-time
+multi-turn dialogue plus on-demand 2–3 variant single-file HTML demos, and
+produces exactly two deliverables per session (`requirements.md` and
+`acceptance-criteria.md`) only after the user explicitly approves
+convergence.
+
+| # | Status-quo chat | Pensees |
+|---|---|---|
+| V-01 | "Design X for me" → immediate plan dump | Detects fuzzy words → asks one structured question first |
+| V-02 | Bundles 3–5 questions per turn | Strict one-question-at-a-time |
+| V-03 | After ~5 turns, summarizes and ships | Stays in dialogue until 7-row checklist is green AND user explicitly approves |
+
+## See it in action
+
+- Public site (NieR-themed; day/night and ZH/EN toggles persist per visitor):
+  <https://yorha-agents.github.io/Pensees/>
+- 5-minute orientation: [docs/QUICK_GUIDE.md](docs/QUICK_GUIDE.md)
+  (中文: [docs/QUICK_GUIDE.zh.md](docs/QUICK_GUIDE.zh.md))
+- Deeper walkthrough: [docs/USER_GUIDE.md](docs/USER_GUIDE.md)
+  (中文: [docs/USER_GUIDE.zh.md](docs/USER_GUIDE.zh.md))
 
 ## Where session output lands
 
