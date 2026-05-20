@@ -209,21 +209,35 @@
     return "[" + key + "]";
   }
 
+  function applyOne(el) {
+    if (el.hasAttribute("data-i18n-skip")) { return; }
+    var key = el.getAttribute("data-i18n");
+    if (!key) { return; }
+    var val = t(key);
+    var attr = el.getAttribute("data-i18n-attr");
+    if (attr) {
+      el.setAttribute(attr, val);
+    } else {
+      el.textContent = val;
+    }
+  }
+
   function applyAll(root) {
     var scope = root || document;
+    // L-41 (PR #3 Bugbot fix): querySelectorAll("[data-i18n]") returns only
+    // DESCENDANTS of scope, never scope itself. Callers like demo.html's
+    // copy-button fallback expect `applyAll(targetEl)` to update targetEl
+    // directly, so we explicitly include scope when it carries [data-i18n].
+    // The `scope !== document` guard preserves the original no-arg semantics
+    // (the document node never carries data-i18n anyway, but skipping it
+    // keeps the loop one step shorter on every page apply).
+    if (scope !== document && scope.nodeType === 1
+        && scope.hasAttribute && scope.hasAttribute("data-i18n")) {
+      applyOne(scope);
+    }
     var nodes = scope.querySelectorAll("[data-i18n]");
     for (var i = 0; i < nodes.length; i++) {
-      var el = nodes[i];
-      if (el.hasAttribute("data-i18n-skip")) { continue; }
-      var key = el.getAttribute("data-i18n");
-      if (!key) { continue; }
-      var val = t(key);
-      var attr = el.getAttribute("data-i18n-attr");
-      if (attr) {
-        el.setAttribute(attr, val);
-      } else {
-        el.textContent = val;
-      }
+      applyOne(nodes[i]);
     }
     var titleEl = document.querySelector("title[data-i18n]");
     if (titleEl) {

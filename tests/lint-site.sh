@@ -317,6 +317,98 @@ if (( k05_hits == 0 )); then
   pass "K-05: no NieR character names in body content"
 fi
 
+# ---- §9.2.8: scope-inclusive applyAll regression (L-41, PR #3 fix) --------
+# Bugbot review on PR #3 caught: applyAll(scope) called scope.querySelectorAll
+# which returns only DESCENDANTS — so the demo.html copy-button manual-select
+# fallback (which sets data-i18n on the button then calls applyAll(btn))
+# never updated the button's textContent. This guards the fix two ways:
+#   (a) static marker grep — i18n.js must contain both the scope-attribute
+#       check AND the descendant query;
+#   (b) optional runtime smoke via node — builds a minimal DOM mock with a
+#       single scope element carrying [data-i18n] and asserts applyAll(scope)
+#       mutates scope.textContent. Skipped (warn, not fail) when node is
+#       absent so the lint still works on bash-only CI runners.
+echo "[lint-site] §9.2.8 scope-inclusive applyAll (L-41, PR #3 Bugbot fix)"
+I18N_JS="${SITE_DIR}/i18n.js"
+if [[ ! -f "$I18N_JS" ]]; then
+  fail "L-41 ${I18N_JS#$REPO_ROOT/}: file missing"
+elif grep -qF 'scope.hasAttribute("data-i18n")' "$I18N_JS" \
+     && grep -qF 'scope.querySelectorAll("[data-i18n]")' "$I18N_JS"; then
+  pass "L-41a: applyAll scope-inclusion marker present (handles scope AND descendants)"
+else
+  fail "L-41a: applyAll missing scope-inclusion fix (see PR #3 review thread)"
+fi
+
+if command -v node >/dev/null 2>&1; then
+  smoke_rc=0
+  node - "$I18N_JS" <<'NODE_EOF' || smoke_rc=$?
+const fs = require("fs");
+const i18nSrc = fs.readFileSync(process.argv[2], "utf8");
+
+let warned = false;
+const origWarn = console.warn;
+console.warn = () => { warned = true; };
+
+const docMock = {
+  documentElement: { lang: "en" },
+  querySelectorAll: () => [],
+  querySelector: () => null,
+  title: "",
+  addEventListener: () => {},
+  readyState: "loading",
+};
+global.document = docMock;
+global.window = {
+  document: docMock,
+  matchMedia: () => ({ matches: false, addEventListener: () => {} }),
+  localStorage: { getItem: () => null, setItem: () => {} },
+  addEventListener: () => {},
+};
+global.navigator = { language: "en" };
+
+eval(i18nSrc);
+
+const i18n = global.window.PenseesI18n;
+if (!i18n || typeof i18n.applyAll !== "function") {
+  console.error("FAIL window.PenseesI18n.applyAll not exposed");
+  process.exit(2);
+}
+
+const target = {
+  nodeType: 1,
+  textContent: "[ COPY ]",
+  _attrs: { "data-i18n": "install.copy_button_manual" },
+  hasAttribute(name) { return Object.prototype.hasOwnProperty.call(this._attrs, name); },
+  getAttribute(name) { return Object.prototype.hasOwnProperty.call(this._attrs, name) ? this._attrs[name] : null; },
+  setAttribute(name, value) { this._attrs[name] = String(value); },
+  querySelectorAll: () => [],
+};
+
+i18n.applyAll(target);
+
+console.warn = origWarn;
+
+if (target.textContent === "[ COPY ]") {
+  console.error("FAIL applyAll(target) did not mutate target.textContent");
+  process.exit(1);
+}
+if (!warned) {
+  // applyAll should have warned about the missing dictionary key (we didn't
+  // load STRINGS), which produces a "[install.copy_button_manual]" textContent.
+  // Either way the key thing is target.textContent changed.
+}
+console.log("OK applyAll(target).textContent ->", JSON.stringify(target.textContent));
+process.exit(0);
+NODE_EOF
+  if (( smoke_rc == 0 )); then
+    pass "L-41b: runtime smoke — applyAll(scope) mutates scope.textContent"
+  else
+    fail "L-41b: runtime smoke FAILED (rc=${smoke_rc}) — applyAll(scope) did not mutate scope"
+  fi
+else
+  warn "L-41b: node not available — skipping runtime smoke (static L-41a still covers the fix)"
+fi
+
 # ---- §9.2.7: embedded-demo byte equality (L-40, soft-fail) ----------------
 echo "[lint-site] §9.2.7 embedded-demo byte equality (L-40)"
 SRC_DEMO="${REPO_ROOT}/.local/pensees/2026-05-18-pensees-self-design/demos/01-preset-voice-comparison.html"
