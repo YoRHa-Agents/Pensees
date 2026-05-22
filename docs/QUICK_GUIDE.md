@@ -54,7 +54,7 @@ curl -fsSL https://yorha-agents.github.io/Pensees/get.sh | bash
 Pin a specific release (recommended for production setups):
 
 ```bash
-PENSEES_VERSION=v0.3.0 curl -fsSL https://yorha-agents.github.io/Pensees/get.sh | sh
+PENSEES_VERSION=v0.3.1 curl -fsSL https://yorha-agents.github.io/Pensees/get.sh | sh
 ```
 
 If you cannot use the curl path (corporate proxy, air-gapped env), see

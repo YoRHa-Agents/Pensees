@@ -67,7 +67,7 @@
   --shadow-tight: 0 1px 0 var(--c-rule);
 
   /* runtime values */
-  --pensees-version: "v0.3.0";
+  --pensees-version: "v0.3.1";
 }
 
 [data-theme="night"] {

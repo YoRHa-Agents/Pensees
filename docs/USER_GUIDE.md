@@ -97,7 +97,7 @@ The most useful one in normal operation is `PENSEES_VERSION`. Pin it for
 reproducible installs:
 
 ```bash
-PENSEES_VERSION=v0.3.0 curl -fsSL https://yorha-agents.github.io/Pensees/get.sh | sh
+PENSEES_VERSION=v0.3.1 curl -fsSL https://yorha-agents.github.io/Pensees/get.sh | sh
 ```
 
 Or follow tip-of-tree on `main`:
@@ -484,7 +484,7 @@ This is non-negotiable (AR-04).
 | Symptom | Likely cause | Fix |
 |---|---|---|
 | Curl install fails with exit 4 | A required tool (`curl` / `tar` / `mkdir` / `mv` / `rm` / `uname`) is missing on PATH | Install the named tool; on minimal containers, `apk add tar` / `apt-get install tar` |
-| Curl install fails with exit 5 | The latest-release API lookup failed (rate-limited or transient) | Retry, or pin `PENSEES_VERSION=v0.3.0` to skip the API call |
+| Curl install fails with exit 5 | The latest-release API lookup failed (rate-limited or transient) | Retry, or pin `PENSEES_VERSION=v0.3.1` to skip the API call |
 | Curl install fails with exit 6 | Tarball returned 404 or 0 bytes | Verify the tag exists in the GitHub releases list; double-check `PENSEES_VERSION` for typos |
 | `install.sh` errors with exit 3 | A target path exists but is not a Pensees symlink | Either run with `--copy` to overwrite, or `rm` the conflicting path first |
 | Host agent does not pick up the skill | Trigger phrase missing from the message, or autoload requires a reopened tab | Send a message with one of the trigger phrases in §1; reopen the chat tab |
