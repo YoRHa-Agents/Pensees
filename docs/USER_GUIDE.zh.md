@@ -90,7 +90,7 @@ bootstrap 脚本会做这些事：
 日常用到最多的还是 `PENSEES_VERSION`。固定一个版本，安装可复现：
 
 ```bash
-PENSEES_VERSION=v0.3.0 curl -fsSL https://yorha-agents.github.io/Pensees/get.sh | sh
+PENSEES_VERSION=v0.3.1 curl -fsSL https://yorha-agents.github.io/Pensees/get.sh | sh
 ```
 
 跟主干 `main`：
@@ -448,7 +448,7 @@ Pensees **绝不**自动跳到下一个 skill（writing-plans、openspec、spec-
 | 症状 | 大概率原因 | 解法 |
 |---|---|---|
 | curl 安装退出码 4 | PATH 上少了必需工具（`curl` / `tar` / `mkdir` / `mv` / `rm` / `uname`） | 装上对应工具；最小化容器上常用 `apk add tar` / `apt-get install tar` |
-| curl 安装退出码 5 | latest-release API 查询失败（限流或瞬时网络问题） | 重试，或直接 `PENSEES_VERSION=v0.3.0` 绕开 API 查询 |
+| curl 安装退出码 5 | latest-release API 查询失败（限流或瞬时网络问题） | 重试，或直接 `PENSEES_VERSION=v0.3.1` 绕开 API 查询 |
 | curl 安装退出码 6 | tarball 返回 404 或 0 字节 | 检查 release tag 是否真的存在；确认 `PENSEES_VERSION` 没拼错 |
 | `install.sh` 退出码 3 | 目标路径已存在但不是 Pensees 装出来的 symlink | 加 `--copy` 强制覆盖，或先手动 `rm` 掉冲突路径 |
 | 宿主 agent 完全不接管 | 触发短语没出现，或 autoload 要重开 tab | 消息里加上第 1 节里的任意一个触发短语；重开 chat tab |
