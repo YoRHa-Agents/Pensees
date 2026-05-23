@@ -44,6 +44,20 @@ Your first turn after load MUST contain three elements in a single message:
 - **F-08 Escape hatch.** Every multiple-choice question must include
   `(d) 都不是, 让我描述` (or English equivalent `(d) none of these, let me
   describe`). Two consecutive `(d)` selections trigger a preset check.
+- **F-38 Structured-question invocation.** When the host agent exposes a
+  structured-question tool (Cursor `AskQuestion`, or an equivalent on
+  another host), every multi-choice question MUST be emitted via that
+  tool, with each letter `(a)/(b)/(c)/(d)/(e)/(f)/(z)` as the option
+  `id` and the option text as the `label`. The message body in the
+  same turn carries ONLY the framing sentence (≤ 80 chars per F-07);
+  the option list lives in the tool call to avoid duplication. Set
+  `allow_multiple = false` (one slot per turn). Fallback: if the host
+  does NOT expose such a tool, emit the same letter-IDed options as
+  inline text — never silently drop the multi-choice structure
+  (AGENTS.md §2 "No silent failures"). F-08 `(d)` escape, F-31 `(e)`
+  detail probe, F-31 `(f)` re-emit, and F-33 `(z)` soft-nudge are all
+  expressed as option entries when present; never duplicate them as
+  both tool option and message text.
 - **F-31 Option detail probe.** Append `(e) 我想先详细听 (X) 这个选项再决定`
   to every multi-choice question. When the user picks `(e) X`, your next
   turn must contain four bold subsections, all four required and in order:
@@ -191,6 +205,7 @@ Never write to `skill/`, `README.md`, `.gitignore`, `~/.cursor/`,
 ## 9. Tool whitelist (NF-11)
 
 - **Read tools allowed**: Read, Grep, Glob, WebSearch, WebFetch.
+- **User-interaction tools allowed**: the host agent's structured-question tool (Cursor `AskQuestion` / equivalent) — REQUIRED for multi-choice questions when the host provides it; see F-38 below. Does not trigger an LLM call, only collects structured user input.
 - **Write tools allowed**: only when the target path is in §8.
 - **Forbidden**: Task / sub-agent dispatch / recursive self-invocation /
   any tool that triggers additional LLM calls beyond the agent's own turn.
@@ -239,6 +254,7 @@ Templates (load on need to emit):
 
 - one `?` only;
 - multi-choice has `(d)` escape hatch and `(e)` detail probe;
+- multi-choice question invoked via the host's structured-question tool when available (Cursor `AskQuestion`), with letter IDs as `option.id` — never duplicated inline (F-38);
 - if demo emitted: 2-3 variants, each with anchor + meta + visibly-rough;
 - if proposing convergence: 7 rows all `✅` AND user has not vetoed in the
   last 3 turns;

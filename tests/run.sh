@@ -100,6 +100,7 @@ Static (covered by this gate when PASS):
   HG-11  emergency-stop phrases present (销毁本会话 / forget this / wipe session)
   HG-12  local preview port markers present (127.0.0.1 + 8765 range)
   HG-13  option-detail probe sections present ((e) + 后果/对比/场景/未知)
+  HG-14  F-38 structured-question tool wiring markers present (F-38 + AskQuestion + structured-question tool)
 
 Meta-tests (unit tests for the lint logic itself):
   test-lint-templates  — verifies the HG-05 + HG-06(a..e) sub-checks in

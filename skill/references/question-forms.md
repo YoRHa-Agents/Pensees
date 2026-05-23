@@ -28,6 +28,34 @@ Every multi-choice question MUST contain, in order:
 If the user picks `(d)` two turns in a row, run a preset-fit check (see
 `styles.md`) — the form is too restrictive for their current state.
 
+## Canonical form vs fallback (F-38)
+
+A multi-choice question has two render modes — the canonical and the
+fallback. Pick by host capability, not by author preference.
+
+**Canonical (preferred)** — when the host agent exposes a structured-
+question tool (e.g. Cursor `AskQuestion`):
+
+- Invoke the tool with one entry in `questions[]`.
+- `prompt` = the one-sentence framing (≤ 80 chars).
+- `options` = list of `{id, label}` where `id` is the letter
+  (`"a"`, `"b"`, `"c"`, `"d"`, `"e"`, `"f"`, `"z"`) and `label` is
+  the option text.
+- `allow_multiple` = `false`.
+- The message body in the same turn carries ONLY the framing prose;
+  the option list lives entirely in the tool call.
+
+**Fallback** — when no structured-question tool is exposed by the
+host (e.g. Codex CLI without an equivalent):
+
+- Emit the framing sentence and the letter-IDed options inline in
+  the message body, exactly as the §"Multi-choice question — mandatory
+  anatomy" section above describes.
+
+Never silently drop the multi-choice structure (AGENTS.md §2 "No
+silent failures"). The letter IDs are stable across both modes —
+the user picks `(a)` / `(b)` / ... the same way either way.
+
 ## Option-detail probe (F-31) full protocol
 
 When the user message is `(e) <letter>` or a synonym (`详细 X` / `tell me
