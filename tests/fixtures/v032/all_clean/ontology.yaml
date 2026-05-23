@@ -1,0 +1,45 @@
+aspects:
+  - name: framing
+    dimensions:
+      - name: who-cares
+        slots:
+          - name: target-stakeholder
+            status: filled
+            definition: novice frontline operator with no scripting background
+            value: novice frontline operator with no scripting background
+            turn_first: 1
+            turn_last: 2
+            term_aliases: ["right people"]
+  - name: scope-boundary
+    dimensions:
+      - name: outer-edge
+        slots:
+          - name: scope-boundary
+            status: filled
+            definition: single happy-path flow only; no error recovery in v1
+            value: single happy-path flow only; no error recovery in v1
+            turn_first: 3
+            turn_last: 4
+            term_aliases: []
+  - name: success-shape
+    dimensions:
+      - name: observable-signal
+        slots:
+          - name: how-we-know
+            status: filled
+            definition: user completes the flow without re-asking for help
+            value: user completes the flow without re-asking for help
+            turn_first: 3
+            turn_last: 4
+            term_aliases: ["good enough"]
+  - name: format
+    dimensions:
+      - name: medium
+        slots:
+          - name: output-format
+            status: open
+            definition: long-form written guide vs short voice-friendly script
+            value: null
+            turn_first: 5
+            turn_last: 6
+            term_aliases: []

@@ -180,6 +180,7 @@ The audit log records the destruction fact only, never any session content.
 You may write to **only** these paths:
 
 - `.local/pensees/{date}-{slug}/**`
+- `.local/pensees/{date}-{slug}/turns.jsonl` — per-turn JSONL recorder hook (F-32, v0.3.2).
 - `.local/pensees/INDEX.md`
 - `.local/pensees/.audit/destruction.log`
 
@@ -225,6 +226,8 @@ Do not preload all references; the bundle budget is 50 KB total (NF-02).
 | Update checklist row | `references/checklist-rubric.md` |
 | Build / update ontology | `references/ontology-schema.md` |
 | Want a worked non-software session | `examples/example-non-software-session.md` |
+| Score a turn / write turns.jsonl | `references/intermediate-result-schema.md` + `references/composite-signals.md` |
+| Tune mid-result thresholds | `.local/pensees/.config.yaml` (per-session override; see `composite-signals.md` §"Tuning hook") |
 
 Templates (load on need to emit):
 
@@ -240,7 +243,22 @@ Templates (load on need to emit):
 - if proposing convergence: 7 rows all `✅` AND user has not vetoed in the
   last 3 turns;
 - if creating `outputs/`: HARD-GATE both conditions met;
+- if `composite_premature >= T1`: append `(z)` soft-nudge per F-33; if `composite_dead_end >= T2`: replace with meta-pause turn per F-35; never both in one turn (F-37);
 - writes only to whitelist paths.
+
+## 14. Mid-result analysis (F-32..F-37, v0.3.2 Lite)
+
+> Six F-rules wiring the in-skill guardrail to the per-turn recorder.
+> Full text + boundary clauses in `references/mid-result-guardrails.md`;
+> signal math + thresholds + tuning hook in `references/composite-signals.md`;
+> data contract in `references/intermediate-result-schema.md`. Lite-only.
+
+- **F-32 Per-turn recorder.** Append one JSONL line per agent turn to `<session_dir>/turns.jsonl` per the schema; fail loudly on violations.
+- **F-33 Soft-nudge trigger.** When `composite_premature >= T1` (default `0.6`), append `(z) 退一步, 这个问题是不是问错了` after `(d)`/`(e)`.
+- **F-34 Soft-nudge boundary.** `(z)` does not change semantics, does not count toward F-08/F-31, is the ONLY injected element this turn.
+- **F-35 Hard-pause trigger.** When `composite_dead_end >= T2` (default `0.6`), replace next turn with a meta-question (`question_form: "meta-pause"`, ≤2 options + `(d)`).
+- **F-36 Hard-pause boundary.** Shelved domain question re-attempted at turn `N+2`; if dead-end still crosses, escalate (no back-to-back hard-pause).
+- **F-37 Priority cap.** ≤1 guardrail-injected element per turn; dead-end wins over premature when both composites cross.
 
 > Spec source-of-truth lives in `.local/memory/specs/pensees/` (gitignored,
 > design-only). This SKILL.md is the runtime contract.

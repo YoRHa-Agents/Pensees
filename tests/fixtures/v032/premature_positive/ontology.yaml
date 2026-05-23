@@ -1,0 +1,56 @@
+aspects:
+  - name: notification-trigger
+    dimensions:
+      - name: latency-budget
+        slots:
+          - name: max-delay-seconds
+            status: open
+            definition: maximum acceptable seconds before notification fires
+            value: null
+            turn_first: 1
+            turn_last: 5
+            term_aliases: ["fast"]
+  - name: user-experience
+    dimensions:
+      - name: frequency-cap
+        slots:
+          - name: per-day-cap
+            status: open
+            definition: maximum notifications allowed per day per user
+            value: null
+            turn_first: 5
+            turn_last: 5
+            term_aliases: ["not annoying"]
+  - name: channel
+    dimensions:
+      - name: delivery-medium
+        slots:
+          - name: push-vs-email-vs-inapp
+            status: open
+            definition: which delivery medium is used for each notification
+            value: null
+            turn_first: 1
+            turn_last: 1
+            term_aliases: []
+  - name: audience
+    dimensions:
+      - name: user-segment
+        slots:
+          - name: target-audience
+            status: open
+            definition: which user segment receives notifications
+            value: null
+            turn_first: 1
+            turn_last: 1
+            term_aliases: []
+  - name: success-criterion
+    dimensions:
+      - name: metric
+        slots:
+          - name: success-metric
+            status: open
+            definition: how to measure whether notifications succeed
+            value: null
+            turn_first: 1
+            turn_last: 1
+            term_aliases: []
