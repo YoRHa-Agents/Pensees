@@ -27,6 +27,7 @@ chmod +x \
   tests/lint-site.sh \
   tests/smoke-curl-install.sh \
   tests/lint-repo-safety.sh \
+  tests/test_signals_lite.sh \
   2>/dev/null || true
 
 overall_rc=0
@@ -58,6 +59,7 @@ run_step "test-lint-templates"         tests/test-lint-templates.sh
 run_step "lint-site"                   tests/lint-site.sh
 run_step "smoke-curl-install"          tests/smoke-curl-install.sh
 run_step "lint-repo-safety"            tests/lint-repo-safety.sh
+run_step "test-signals-lite"           tests/test_signals_lite.sh
 
 echo
 echo "===================================================================="

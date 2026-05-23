@@ -1,0 +1,56 @@
+aspects:
+  - name: framing
+    dimensions:
+      - name: who-cares
+        slots:
+          - name: target-stakeholder
+            status: open
+            definition: which stakeholder gets the most value from this work
+            value: null
+            turn_first: 1
+            turn_last: 10
+            term_aliases: ["right people"]
+  - name: scope-boundary
+    dimensions:
+      - name: outer-edge
+        slots:
+          - name: not-included
+            status: open
+            definition: what is explicitly out of scope for this iteration
+            value: null
+            turn_first: 1
+            turn_last: 3
+            term_aliases: []
+  - name: success-shape
+    dimensions:
+      - name: observable-signal
+        slots:
+          - name: how-we-know
+            status: open
+            definition: observable signal that proves this is landing
+            value: null
+            turn_first: 5
+            turn_last: 6
+            term_aliases: []
+  - name: tradeoff
+    dimensions:
+      - name: priority
+        slots:
+          - name: speed-vs-quality
+            status: open
+            definition: which side wins when these conflict at run time
+            value: null
+            turn_first: 7
+            turn_last: 8
+            term_aliases: []
+  - name: format
+    dimensions:
+      - name: medium
+        slots:
+          - name: written-vs-spoken
+            status: open
+            definition: written longform vs spoken short form for delivery
+            value: null
+            turn_first: 9
+            turn_last: 11
+            term_aliases: []

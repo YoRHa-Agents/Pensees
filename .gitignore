@@ -176,3 +176,5 @@ secrets.yml
 .secrets/
 .local-secrets/
 .direnv/
+
+tests/fixtures/v032/*/review.md

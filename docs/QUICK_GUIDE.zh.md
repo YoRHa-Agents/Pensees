@@ -51,7 +51,7 @@ curl -fsSL https://yorha-agents.github.io/Pensees/get.sh | bash
 生产环境建议固定到某个 release tag：
 
 ```bash
-PENSEES_VERSION=v0.3.1 curl -fsSL https://yorha-agents.github.io/Pensees/get.sh | sh
+PENSEES_VERSION=v0.3.2 curl -fsSL https://yorha-agents.github.io/Pensees/get.sh | sh
 ```
 
 如果走不通 curl（公司代理、无外网环境等），可以走 `git clone` 或者手动

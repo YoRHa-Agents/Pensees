@@ -20,15 +20,19 @@ fail() { printf '  FAIL %s\n' "$1"; fail_count=$((fail_count + 1)); }
 
 echo "[lint-skill] checking ${SKILL}"
 
-# --- HG-09: SKILL.md body ≤ 250 lines -----------------------------------------
+# --- HG-09: SKILL.md body ≤ 300 lines -----------------------------------------
+# Cap raised from 250 -> 300 in v0.3.2 to accommodate §14 Mid-result analysis
+# (F-32..F-37) stub; the long-form prose for those rules lives in
+# skill/references/mid-result-guardrails.md so the Tier-1 SKILL.md stays the
+# concise runtime contract. Future bumps require an explicit design pass.
 if [[ ! -f "$SKILL" ]]; then
   fail "HG-09 SKILL.md missing at $SKILL"
 else
   lines=$(wc -l < "$SKILL")
-  if (( lines <= 250 )); then
-    pass "HG-09 SKILL.md ≤ 250 lines (actual: ${lines})"
+  if (( lines <= 300 )); then
+    pass "HG-09 SKILL.md ≤ 300 lines (actual: ${lines})"
   else
-    fail "HG-09 SKILL.md is ${lines} lines (limit 250)"
+    fail "HG-09 SKILL.md is ${lines} lines (limit 300)"
   fi
 fi
 
