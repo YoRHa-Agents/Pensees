@@ -25,6 +25,7 @@ echo "[lint-skill] checking ${SKILL}"
 # (F-32..F-37) stub; the long-form prose for those rules lives in
 # skill/references/mid-result-guardrails.md so the Tier-1 SKILL.md stays the
 # concise runtime contract. Future bumps require an explicit design pass.
+# v0.3.3 added F-38 structured-tool wiring (~16 lines); stays within 300.
 if [[ ! -f "$SKILL" ]]; then
   fail "HG-09 SKILL.md missing at $SKILL"
 else
@@ -86,6 +87,19 @@ if (( e_ok == 1 )) && (( ${#miss[@]} == 0 )); then
   pass "HG-13 (e) and all 4 detail sections present (后果/对比/场景/未知)"
 else
   fail "HG-13 missing — e_ok=${e_ok}, missing_sections=[${miss[*]:-none}]"
+fi
+
+# --- HG-14: structured-question tool wiring (F-38, v0.3.3) -------------------
+hg14_missing=()
+for marker in "F-38" "AskQuestion" "structured-question tool"; do
+  if ! grep -qF -- "$marker" "$SKILL"; then
+    hg14_missing+=("$marker")
+  fi
+done
+if (( ${#hg14_missing[@]} == 0 )); then
+  pass "HG-14 F-38 structured-question tool wiring documented in SKILL.md"
+else
+  fail "HG-14 SKILL.md missing F-38 markers: [${hg14_missing[*]}]"
 fi
 
 # --- AR-10 / AP-08: software vocab without gloss -------------------------------
